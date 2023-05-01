@@ -1,0 +1,49 @@
+{% load static %}
+<div class="left_col">
+  <div class="navbar nav_title" style="border: 0;">
+    <a href="{% url 'dashboard' %}" class="site_title"><i class="fa fa-certificate"></i> <span>ASR</span></a>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <!-- menu profile quick info -->
+  <div class="profile clearfix">
+    <div class="profile_pic">
+      <img src="{% static 'images/img.jpg' %}" alt="profile_image" class="img-circle profile_img">
+    </div>
+    <div class="profile_info">
+      <span>Welcome,</span>
+      <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    </div>
+  </div>
+  <!-- /menu profile quick info -->
+
+  <br />
+
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <h3>General Section</h3>
+      <ul class="nav side-menu">
+        <li><a href="{% url 'dashboard' %}"><i class="fa fa-home"></i> Dashboard </a>
+        </li>
+        <li><a><i class="fa fa-edit"></i> Portfolio Site Form <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="#">Portfolio Info</a></li>
+            <li><a href="#">My Services</a></li>
+            <li><a href="#">My Projects</a></li>
+            <li><a href="#">Education Info</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-edit"></i> Personal Info Form <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="#">User Info</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-commenting"></i> Messages</a></li>
+        <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- /sidebar menu -->
+</div>
