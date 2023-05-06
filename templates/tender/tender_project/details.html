@@ -1,0 +1,65 @@
+{% extends "base_template/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <style type="text/css">
+        @media print {
+            /* Hide every other element.*/
+            body *{visibility: hidden;}
+            .print-container *{ visibility: visible;}
+        }
+        @page {
+            size: auto;
+        }
+    </style>
+    <div>
+        {% include "components/messages.html" %}
+    </div>
+    <div class="row print-container">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="col-md-3 col-sm-3 text-center">
+                    <img src="{% static 'image/logo.jpeg' %}" class="logo" style="width: 120px;">
+                </div>
+                    <div class="col-md-6 col-sm-6 text-center ">
+                        <h3 class = "font-weight-normal">ASR TECHNOLOGIES BANGLADESH</h3>
+                        <h4 class = "font-weight-light"> Noya Paltan, Dhaka-1000 </h4>
+                        <h4 class = "font-weight-normal text-uppercase"><u> {{ title }}</u> </h4>
+                    </div>
+                <div class="col-md-3 col-sm-3 text-center">
+                    <button type="button" class="btn btn-primary d-print-none" onclick="print()">
+                        <i class="fa fa-print"></i>
+                    </button>
+                    <a onclick="history.back()">
+                        <button type="button" class="btn btn-warning d-print-none">
+                            <i class="fa fa-backward"></i>
+                        </button>
+                    </a>
+                </div>
+                <div class="col-md-12"> <!-- COLUMN NO-01 -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="bg-dark">
+                                    <th class="w-40">Item</th>
+                                    <th class="w-60">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for name, value in instance.get_fields %}
+                                    <tr>
+                                        <td>{{ name }}</td>
+                                        <td class="text-wrap">{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock content %}

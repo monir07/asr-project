@@ -42,13 +42,13 @@
         <div class="main_container">
           {% block sidebar %}
             <div class="col-md-3 left_col" style="overflow-y:scroll; height:600px; overflow-x: hidden; position:fixed;">
-              {% include "admin/sidebar.html" %}
+              {% include "app/sidebar.html" %}
             </div>
           {% endblock sidebar %}
 
           {% block top_navigation %}
             <div class="top_nav">
-              {% include "admin/top_navigation.html" %}
+              {% include "app/top_navigation.html" %}
             </div>
           {% endblock top_navigation %}
 
@@ -58,7 +58,7 @@
 
           {% block footer %}
             <footer>
-              {% include "admin/footer.html" %}
+              {% include "app/footer.html" %}
             </footer>
           {% endblock footer %}
         </div>

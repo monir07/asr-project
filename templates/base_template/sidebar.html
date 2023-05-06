@@ -27,19 +27,33 @@
       <ul class="nav side-menu">
         <li><a href="{% url 'dashboard' %}"><i class="fa fa-home"></i> Dashboard </a>
         </li>
-        <li><a><i class="fa fa-edit"></i> Portfolio Site Form <span class="fa fa-chevron-down"></span></a>
+        <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Reference </a>
+        </li>
+        <li><a><i class="fa fa-edit"></i> Tender-Project <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="#">Portfolio Info</a></li>
-            <li><a href="#">My Services</a></li>
-            <li><a href="#">My Projects</a></li>
-            <li><a href="#">Education Info</a></li>
+            <li><a href="{% url 'tender_project_create' %}">Create</a></li>
+            <li><a href="{% url 'tender_project_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-edit"></i> Personal Info Form <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-edit"></i> Retension Money <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
-            <li><a href="#">User Info</a></li>
+            <li><a href="{% url 'retension_create' %}">New</a></li>
+            <li><a href="{% url 'retension_list' %}">List</a></li>
           </ul>
         </li>
+        <li><a><i class="fa fa-edit"></i> Tender Security <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'security_money_create' %}">New</a></li>
+            <li><a href="{% url 'security_money_list' %}">List</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-edit"></i> Performance Gurranty <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'pg_create' %}">New</a></li>
+            <li><a href="{% url 'pg_list' %}">List</a></li>
+          </ul>
+        </li>
+        
         <li><a><i class="fa fa-commenting"></i> Messages</a></li>
         <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li>
       </ul>
