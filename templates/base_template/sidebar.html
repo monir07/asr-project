@@ -29,6 +29,12 @@
         </li>
         <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Reference </a>
         </li>
+        <li><a><i class="fa fa-edit"></i> Site Engineer <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'site_engineer_create' %}">Create</a></li>
+            <li><a href="{% url 'site_engineer_list' %}">List</a></li>
+          </ul>
+        </li>
         <li><a><i class="fa fa-edit"></i> Tender-Project <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'tender_project_create' %}">Create</a></li>
@@ -53,8 +59,27 @@
             <li><a href="{% url 'pg_list' %}">List</a></li>
           </ul>
         </li>
+        <li><a><i class="fa fa-edit"></i> Cost Main Head <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'main_head_create' %}">New</a></li>
+            <li><a href="{% url 'main_head_list' %}">List</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-edit"></i> Cost Sub Head <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'sub_head_create' %}">New</a></li>
+            <li><a href="{% url 'sub_head_list' %}">List</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-university"></i> Bank Information <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'bank_info_create' %}">New</a></li>
+            <li><a href="{% url 'bank_info_list' %}">List</a></li>
+          </ul>
+        </li>
         
         <li><a><i class="fa fa-commenting"></i> Messages</a></li>
+        <li><a href="{% url 'generate_pdf' %}"><i class="fa fa-commenting"></i> pdf</a></li>
         <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li>
       </ul>
     </div>

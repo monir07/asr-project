@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
-from .forms import (TenderProjectForm, MainHeadForm, SubHeadForm)
+from .forms import (TenderProjectForm)
 from .models import (TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature)
 
 
@@ -114,6 +114,7 @@ class TenderProjectDetailView(generic.DetailView):
     model = TenderProject
     context_object_name = 'instance'
     pk_url_kwarg = 'pk'
+    # template_name = 'pdf-template/sample.html'
     template_name = 'tender/tender_project/details.html'
     title = "project details"
 
@@ -139,3 +140,82 @@ class TenderProjectDeleteView(generic.edit.DeleteView):
             self.object.delete()
             messages.success(self.request, self.success_message)
             return HttpResponseRedirect(reverse_lazy(self.success_url))
+
+
+class MainHeadCreateView(generic.CreateView):
+    model = CostMainHead
+    form_class = None
+    template_name = 'tender/tender_project/form.html'
+    success_message = "Created Successfully."
+    title = 'Cost Head Create Form'
+    success_url = "tender_project_list"
+    
+    def form_valid(self, form, *args, **kwargs):
+        self.object = form.save(commit=False)
+        with transaction.atomic():
+            form.save()
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(reverse_lazy(self.success_url))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['basic_template'] = ""
+        context['title'] = self.title
+        return context
+
+
+class CostHeadUpdateView(generic.UpdateView):
+    form_class = None
+    model = CostMainHead
+    context_object_name = 'instance'
+    template_name = 'tender/tender_project/form.html'
+    success_message = 'Data updated successfully'
+    success_url = "tender_project_list"
+    title = 'Cost Head Update Form'
+
+
+    def form_valid(self, form, *args, **kwargs):
+        form.save()
+        
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(reverse_lazy(self.success_url))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['basic_template'] = ''
+        context['title'] = self.title
+        return context
+
+import os
+from io import BytesIO
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
+
+
+def render_pdf_view(request):
+    template_path = 'pdf-template/sample.html'
+    context = {'myvar': 'this is your template context'}
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    # pisa_status = pisa.CreatePDF(
+    #    html, dest=response)
+    result = BytesIO()
+    pisa_status = pisa.pisaDocument(
+        src=BytesIO(html.encode("ISO-8859-1")),
+        dest=result,
+        # encoding='UTF-8'
+    )
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    # return response
+    return HttpResponse(result.getvalue(), content_type='application/pdf')
