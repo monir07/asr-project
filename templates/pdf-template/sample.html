@@ -13,26 +13,21 @@
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="row">
-            <div class="col-md-3 col-sm-3 text-center">
-                <img src="{% static 'image/logo.jpeg' %}" class="logo" style="width: 120px;">
-            </div>
-            <div class="col-md-6 col-sm-6 text-center ">
-                <h3 class = "font-weight-normal">ASR TECHNOLOGIES BANGLADESH</h3>
-                <h4 class = "font-weight-light"> Noya Paltan, Dhaka-1000 </h4>
-                <h4 class = "font-weight-normal text-uppercase"><u> {{ title }}</u> </h4>
-            </div>
-            <div class="col-md-3 col-sm-3 text-center">
-                <button type="button" class="btn btn-primary d-print-none" onclick="print()">
-                    <i class="fa fa-print"></i>
-                </button>
-                <a onclick="history.back()">
-                    <button type="button" class="btn btn-warning d-print-none">
-                        <i class="fa fa-backward"></i>
-                    </button>
-                </a>
-            </div>
+            <table class="table">
+              <tbody>
+                <td>
+                  <img src="{% static 'image/logo.jpeg' %}" class="logo" style="width: 120px;">
+                </td>
+                <td scope="col">
+                  <h3 >ASR TECHNOLOGIES BANGLADESH</h3>
+                  <h4 > Noya Paltan, Dhaka-1000 </h4>
+                  <h4><u> {{ title }}</u> </h4>
+                </td>
+                <td></td>
+              </tbody>
+            </table>
+
             <div class="col-md-12"> <!-- COLUMN NO-01 -->
-                
                     <table class="table">
                       <thead>
                         <tr>

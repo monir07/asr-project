@@ -1,9 +1,11 @@
 from django.urls import path, include
 from .views import *
 from .models import (ProjectSiteEngineer, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, BankInformation)
-from .forms import (SiteEngineerForm, BankInformationForm, get_form, get_cost_head_form)
-
+from .forms import (SiteEngineerForm, BankInformationForm, SecurityMoneyForm, TenderPgForm,
+                    get_form, get_cost_head_form)
+from .engineer import urls as engineer_urls
 urlpatterns = [
+    path("engineers/", include(engineer_urls)),
     path('site-engineer-create/', TenderProjectCreateView.as_view(
     title = 'Site Engineer Create Form',
     model = ProjectSiteEngineer,
@@ -76,7 +78,7 @@ urlpatterns = [
     path('security-money-create/', TenderProjectCreateView.as_view(
     title = 'Security Money Create Form',
     model = SecurityMoney,
-    form_class = get_form(SecurityMoney),
+    form_class = SecurityMoneyForm,
     success_url = "security_money_list",
     ), name='security_money_create'),    
     
@@ -91,7 +93,7 @@ urlpatterns = [
     
     path('security-money-update/<int:pk>', TenderProjectUpdateView.as_view(
     title = 'Tender Security Money Update Form',
-    form_class = get_form(SecurityMoney),
+    form_class = SecurityMoneyForm,
     model = SecurityMoney,
     success_url = "security_money_list",
     ), name='security_money_update'),
@@ -110,7 +112,7 @@ urlpatterns = [
     path('pg-create/', TenderProjectCreateView.as_view(
     title = 'PG(Performance Gurranty) Create Form',
     model = TenderPg,
-    form_class = get_form(TenderPg),
+    form_class = TenderPgForm,
     success_url = "pg_list",
     ), name='pg_create'),    
     
@@ -125,7 +127,7 @@ urlpatterns = [
     
     path('pg-update/<int:pk>', TenderProjectUpdateView.as_view(
     title = 'Performance Gurranty Update Form',
-    form_class = get_form(TenderPg),
+    form_class = TenderPgForm,
     model = TenderPg,
     success_url = "pg_list",
     ), name='pg_update'),

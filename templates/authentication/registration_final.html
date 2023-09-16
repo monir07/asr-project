@@ -1,0 +1,64 @@
+{% extends basic_template %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div>
+        {% include "components/messages.html" %}
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+            <div class="x_title">
+                <h2> {{title}} <small>follow instruction carefully</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                    <form method="post"
+                        class="number-tab-steps wizard-circle"
+                        method="post"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h6>Step {{ wizard.steps.step1 }}</h6>
+                        
+                        {{ wizard.management_form }}
+                        <div id="test">
+                        {% if wizard.form.forms %}
+                            {{ wizard.form.management_form }}
+                            {% for form in wizard.form.forms %}
+                                {{ form|crispy }}
+                            {% endfor %}
+                        {% else %}
+                            {{ wizard.form|crispy }}
+                        {% endif %}
+                        </div>
+                        {% if wizard.steps.prev %}
+                        <div class="btnsaction">
+                            <button name="wizard_goto_step"
+                                    type="submit"
+                                    class="page-prev btn btn-default"
+                                    value="{{ wizard.steps.prev }}"
+                                    formnovalidate="formnovalidate">
+                                {% trans "Previous" %}
+                            </button>
+                        {% endif %}
+                        <input type="submit"
+                                class="page-next btn btn-primary  sw-btn-next"
+                                value="{% trans "Next" %}"/>
+                        </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -197,7 +197,7 @@ from django.contrib.staticfiles import finders
 
 def render_pdf_view(request):
     template_path = 'pdf-template/sample.html'
-    context = {'myvar': 'this is your template context'}
+    context = {'title': 'this is your template context'}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
