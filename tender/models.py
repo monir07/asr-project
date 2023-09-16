@@ -41,16 +41,6 @@ class ProjectSiteEngineer(BaseModel):
         return f'{self.user}'
 
 
-class SiteEngineerPayments(BaseModel):
-    engineer = models.ForeignKey(ProjectSiteEngineer, on_delete=models.CASCADE, related_name='site_engineer_pay')
-    balance = models.DecimalField(max_digits=15, decimal_places=2)
-    payment_date = models.DateField()
-
-    def __str__(self):
-        return f'{self.engineer.user} : {self.balance}'
-
-
-
 class TenderProject(BaseModel):
     engineer = models.ForeignKey(ProjectSiteEngineer, on_delete=models.PROTECT, related_name="tender_project")
     project_name = models.CharField(max_length=200)
@@ -72,7 +62,7 @@ class TenderProject(BaseModel):
         return [(field.name, field.value_to_string(self)) for field in TenderProject._meta.fields if field.name not in ignore_fields]
 
 
-class RetensionMoney(BaseModel):
+class RetensionMoney(BaseModel):  # as like security  money.
     tender = models.ForeignKey(TenderProject, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     is_withdraw = models.BooleanField(default=False)
@@ -173,8 +163,8 @@ class LoanInformation(BaseModel):
 
 
 class DailyExpendiature(BaseModel):
-    project = models.ForeignKey(TenderProject, on_delete=models.PROTECT, related_name='project_expendiature')
-    site_engier = models.ForeignKey(SiteEngineerPayments, on_delete=models.PROTECT, related_name='site_engier_expendiature', null=True, blank=True)
+    project = models.ForeignKey(TenderProject, on_delete=models.PROTECT, related_name='project_expendiature', null=True, blank=True)
+    site_engier = models.ForeignKey(ProjectSiteEngineer, on_delete=models.PROTECT, related_name='site_engier_expendiature', null=True, blank=True)
     # office_entry = blank ture
     security_money = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_expendiature', null=True, blank=True)
     performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_expendiature', null=True, blank=True)
@@ -183,7 +173,7 @@ class DailyExpendiature(BaseModel):
     main_head = models.ForeignKey(CostMainHead, on_delete=models.PROTECT, related_name='main_head_expendiature', null=True, blank=True)
     sub_head = models.ForeignKey(CostSubHead, on_delete=models.PROTECT, related_name='sub_head_expendiature', null=True, blank=True)
 
-    quantity = models.FloatField()
+    quantity = models.DecimalField(max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=20)
     paid_amount = models.DecimalField(max_digits=10, decimal_places=2)
     due_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -205,14 +195,14 @@ class DailyExpendiature(BaseModel):
     
 
 class MoneyReceived(BaseModel):
-    project = models.ForeignKey(TenderProject, on_delete=models.PROTECT, related_name='bill_received_project')
-    retention_money = models.ForeignKey(RetensionMoney, on_delete=models.PROTECT)  # as like security  money.
-    bank_info = models.ForeignKey(BankInformation, on_delete=models.PROTECT, related_name='bill_received_bank', blank=True, null=True)
+    project = models.ForeignKey(TenderProject, on_delete=models.PROTECT, related_name='project_money_received')
+    retention_money = models.ForeignKey(RetensionMoney, on_delete=models.PROTECT, blank=True, null=True)  # as like security  money.
+    bank_info = models.ForeignKey(BankInformation, on_delete=models.PROTECT, related_name='bank_money_received', blank=True, null=True)
 
-    security_money = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_expendiature', null=True, blank=True)
-    performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_expendiature', null=True, blank=True)
-    loan_info = models.ForeignKey(LoanInformation, on_delete=models.PROTECT, related_name='loan_expendiature', null=True, blank=True)
-    cash_balance = models.ForeignKey(CashBalance, on_delete=models.PROTECT, related_name='cash_expendiature', null=True, blank=True)
+    security_money = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_received', null=True, blank=True)
+    performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_received', null=True, blank=True)
+    loan_info = models.ForeignKey(LoanInformation, on_delete=models.PROTECT, related_name='loan_received', null=True, blank=True)
+    cash_balance = models.ForeignKey(CashBalance, on_delete=models.PROTECT, related_name='cash_received', null=True, blank=True)
     
     """ if received method is bank then it does increse bank balance and need revceived cheque and bank name. """
     received_method = models.CharField(max_length=30, choices=ReceivedOption.choices)
@@ -225,7 +215,7 @@ class MoneyReceived(BaseModel):
     deduction_of_tax = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
     deduction_of_ld = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
     misc_deduction = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
-    security_money = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
+    security_money = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)  # retension money amount.
     
     received_amount = models.DecimalField(max_digits=13, decimal_places=2)  # total_amount - all_decution
 
