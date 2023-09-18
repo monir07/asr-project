@@ -170,6 +170,7 @@ class DailyExpendiature(BaseModel):
     performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_expendiature', null=True, blank=True)
     loan_info = models.ForeignKey(LoanInformation, on_delete=models.PROTECT, related_name='loan_expendiature', null=True, blank=True)
     cash_balance = models.ForeignKey(CashBalance, on_delete=models.PROTECT, related_name='cash_expendiature', null=True, blank=True)
+    
     main_head = models.ForeignKey(CostMainHead, on_delete=models.PROTECT, related_name='main_head_expendiature', null=True, blank=True)
     sub_head = models.ForeignKey(CostSubHead, on_delete=models.PROTECT, related_name='sub_head_expendiature', null=True, blank=True)
 
