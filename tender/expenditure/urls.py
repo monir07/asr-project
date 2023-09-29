@@ -2,6 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path('dashboard/',ExpendatureDashboardView.as_view(),name='expenditure_dashboard'),
     path('form-create/',ExpenditureCreateView.as_view(),name='expenditure_form_create'),
     path('form-update/<int:pk>',ExpenditureUpdateView.as_view(),name='expenditure_form_update'),
     path('list/',ExpenditureListView.as_view(),name='expenditure_list'),

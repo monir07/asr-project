@@ -7,7 +7,7 @@ from .engineer import urls as engineer_urls
 from .expenditure import urls as expenditure_urls
 urlpatterns = [
     path("engineers/", include(engineer_urls)),
-    path("expenditure/", include(expenditure_urls)),
+    path("expendature/", include(expenditure_urls)),
     path('site-engineer-create/', TenderProjectCreateView.as_view(
     title = 'Site Engineer Create Form',
     model = ProjectSiteEngineer,

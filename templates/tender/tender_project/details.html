@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="right_col" role="main">
+<div class="right_col" role="main" id="pdf_content">
     <style type="text/css">
         @media print {
             /* Hide every other element.*/
@@ -28,7 +28,7 @@
                         <h4 class = "font-weight-normal text-uppercase"><u> {{ title }}</u> </h4>
                     </div>
                 <div class="col-md-3 col-sm-3 text-center">
-                    <button type="button" class="btn btn-primary d-print-none" onclick="print()">
+                    <button type="button" class="btn btn-primary d-print-none" id="generate-pdf">
                         <i class="fa fa-print"></i>
                     </button>
                     <a onclick="history.back()">
@@ -63,3 +63,25 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+    document.getElementById("generate-pdf").addEventListener("click", function() {
+        const element = document.getElementById("pdf_content"); // Replace with the ID of the element you want to convert
+
+        var opt = {
+            margin:       [.5, .5, .5, .5], // [top, left, bottom, right]
+            filename:     'myfile.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        
+        // New Promise-based usage:
+        html2pdf().set(opt).from(element).save();
+    
+        // html2pdf().from(element).save("document.pdf"); // This will save the PDF with the name "document.pdf"
+    });
+</script>
+{% endblock js %}

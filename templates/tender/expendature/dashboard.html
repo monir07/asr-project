@@ -1,0 +1,50 @@
+{% extends "base_template/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div>
+        {% include "components/messages.html" %}
+    </div>
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Expendature Dashboard</h3>
+        </div>
+
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="">
+                <div class="x_content">
+                    <div class="row">
+                        {% for key, value in url_list.items %}
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="{{ value.2 }}"></i>
+                                </div>
+                                <div class="count">{{ forloop.counter }}</div>
+                                <a href="{% url value.0  %}" class="h3">{{ value.1 }}</a>
+                                {% comment %} <h3>{{ value.1 }}</h3> {% endcomment %}
+                                {% comment %} <p>Lorem ipsum psdea itgum rixt.</p> {% endcomment %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
