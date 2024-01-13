@@ -8,19 +8,49 @@ from django.db import transaction
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.views import (LoginView, LogoutView)
-from django.contrib.auth import (login as auth_login)
+from django.contrib.auth.views import (LoginView, PasswordChangeView, LogoutView)
+from django.contrib.auth import (login as auth_login, logout as auth_logout)
 from django.template import loader
 from django.http import HttpResponse
 from .log_entry import CustomLogEntry
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixin import CommonMixin
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # Create your views here.
+class SignUpCreateView(generic.CreateView):
+    model = User
+    form_class = SignUpForm
+    template_name = 'authentication/sign_up.html'
+    success_message = "User Registration Success."
+    title = "User Registration Form"
+    
+    def form_valid(self, form, *args, **kwargs):
+        self.object = form.save(commit=False)
+        with transaction.atomic():
+            self.object.save()
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(self.get_default_redirect_url())
+
+    def get_default_redirect_url(self, **kwargs):
+        """Return the default redirect URL."""
+        get_request = self.request.GET.copy()
+        if get_request.get('next', None):
+            self.next_page = get_request.get('next')
+            return resolve_url(self.next_page)
+        else:
+            return resolve_url(settings.LOGIN_REDIRECT_URL)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        return context
+    
+
 class UserLoginView(LoginView):
     form_class = LoginForm
-    template_name = 'accounts/form.html'
+    template_name = 'authentication/login.html'
     success_url = reverse_lazy(settings.LOGIN_REDIRECT_URL)
     success_message = 'Login successfully'
     title = "User Login Form"
@@ -54,7 +84,21 @@ class UserLoginView(LoginView):
         context['title'] = self.title
         return context
 
-class Dashboard(generic.TemplateView):
+class UserLogoutView(View):
+    next_page = reverse_lazy(settings.LOGIN_REDIRECT_URL)
+    def get(self, request, *args, **kwargs):
+        auth_logout(request)
+        return HttpResponseRedirect(self.next_page)
+
+class UserPasswordChangeView(PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    success_url = reverse_lazy(settings.LOGIN_URL)
+    template_name = 'authentication/change_password.html'
+    title = 'Password change form'
+    success_message = 'Password Change successfully'
+
+
+class Dashboard(LoginRequiredMixin, generic.TemplateView):
     template_name = 'base_template/dashboard.html'
     title = 'ASR Dashboard'
 

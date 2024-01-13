@@ -3,6 +3,7 @@ from django.db import transaction
 from django.db.models import Q, Prefetch, Sum, Value
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.http.response import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
@@ -28,7 +29,7 @@ def format_search_string(fields, keyword):
 def get_fields(model, fieldnames):
     return [model._meta.get_field(field) for field in fieldnames]
 
-class TenderProjectCreateView(generic.CreateView):
+class TenderProjectCreateView(LoginRequiredMixin, generic.CreateView):
     model = TenderProject
     form_class = TenderProjectForm
     template_name = 'tender/tender_project/form.html'

@@ -5,6 +5,26 @@ from crispy_forms.layout import Submit
 from django.utils.text import capfirst
 UserModel = User()
 
+class SignUpForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()    
+        # self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
+        # self.helper.form_action = 'submit_survey'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "first_name", "last_name", "password1", "password2")
+    
+    def save(self, commit=True):
+        obj = super(UserCreationForm, self).save(commit=False)
+        obj.active = False
+        if commit:
+            obj.save()
+        return obj
+    
 
 class LoginForm(AuthenticationForm):    
     def __init__(self, request=None, *args, **kwargs):
@@ -27,3 +47,11 @@ class LoginForm(AuthenticationForm):
         self.helper = FormHelper()    
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Login'))
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()    
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Update'))
