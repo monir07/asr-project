@@ -29,37 +29,28 @@
         </li>
         <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Reference </a>
         </li>
-        <li><a><i class="fa fa-edit"></i> Site Engineer <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-group"></i> Employee List <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'create_new_user' %}">Create-User</a></li>
             <li><a href="{% url 'site_engineer_create' %}">Create-Engineer</a></li>
             <li><a href="{% url 'site_engineer_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-edit"></i> Tender-Project <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-cubes"></i> Tender-Project <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'tender_project_create' %}">Create</a></li>
             <li><a href="{% url 'tender_project_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-edit"></i> Retension Money <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-money"></i> Retension Money <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'retension_create' %}">New</a></li>
             <li><a href="{% url 'retension_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-edit"></i> Tender Security <span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
-            <li><a href="{% url 'security_money_create' %}">New</a></li>
-            <li><a href="{% url 'security_money_list' %}">List</a></li>
-          </ul>
-        </li>
-        <li><a><i class="fa fa-edit"></i> Performance Gurranty <span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
-            <li><a href="{% url 'pg_create' %}">New</a></li>
-            <li><a href="{% url 'pg_list' %}">List</a></li>
-          </ul>
-        </li>
+        <li><a href="{% url "expenditure_dashboard" %}"><i class="fa fa-qrcode"></i> Expendature</a></li>
+        <li><a href="{% url "received_dashboard" %}"><i class="fa fa-credit-card"></i> Received Money</a></li>
+        
         <li><a><i class="fa fa-edit"></i> Cost Main Head <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'main_head_create' %}">New</a></li>
@@ -78,8 +69,6 @@
             <li><a href="{% url 'bank_info_list' %}">List</a></li>
           </ul>
         </li>
-        
-        <li><a href="{% url "expenditure_dashboard" %}"><i class="fa fa-home"></i> Expendature</a></li>
         <li><a><i class="fa fa-commenting"></i> Messages</a></li>
         
         <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li>

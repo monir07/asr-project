@@ -6,3 +6,4 @@ django-crispy-forms==1.14.0
 django-formtools==2.3
 pycairo==1.23.0
 reportlab==4.0.0
+xhtml2pdf==0.2.11

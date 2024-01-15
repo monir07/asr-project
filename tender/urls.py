@@ -5,9 +5,11 @@ from .forms import (SiteEngineerForm, BankInformationForm, SecurityMoneyForm, Te
                     get_form, get_cost_head_form)
 from .engineer import urls as engineer_urls
 from .expenditure import urls as expenditure_urls
+from .bill_received import urls as received_urls
 urlpatterns = [
     path("engineers/", include(engineer_urls)),
     path("expendature/", include(expenditure_urls)),
+    path("money-received/", include(received_urls)),
     path('site-engineer-create/', TenderProjectCreateView.as_view(
     title = 'Site Engineer Create Form',
     model = ProjectSiteEngineer,

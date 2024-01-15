@@ -10,17 +10,18 @@ class SignUpForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()    
         # self.helper.form_class = 'blueForms'
-        self.helper.form_method = 'post'
+        # self.helper.form_method = 'post'
         # self.helper.form_action = 'submit_survey'
-        self.helper.add_input(Submit('submit', 'Submit'))
+        # self.helper.add_input(Submit('submit', 'Submit'))
 
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name", "password1", "password2")
     
     def save(self, commit=True):
-        obj = super(UserCreationForm, self).save(commit=False)
+        obj = super().save(commit=False)
         obj.active = False
+        # obj.set_password(self.cleaned_data.get('username'))
         if commit:
             obj.save()
         return obj
