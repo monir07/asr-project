@@ -17,9 +17,9 @@ class ExpendatureDashboardView(generic.TemplateView):
     template_name="tender/expendature/dashboard.html"
     url_list = {
                 'url_1':['tender_project_create', 'Daily Expendature', 'fa fa-caret-square-o-right'],
-                'url_2':['tender_project_create', 'Tender Security', 'fa fa-comments-o'],
-                'url_3':['tender_project_create', 'Tender Performance Guarantee', 'fa fa-sort-amount-desc'],
-                'url_4':['tender_project_create', 'Loan Pay', 'fa fa-check-square-o'],
+                'url_2':['security_money_create', 'Tender Security', 'fa fa-comments-o'],
+                'url_3':['pg_create', 'Tender Performance Guarantee', 'fa fa-sort-amount-desc'],
+                'url_4':['loan_info_create', 'Loan Pay', 'fa fa-check-square-o'],
             }
 
     def get_context_data(self, **kwargs):

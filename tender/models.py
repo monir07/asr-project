@@ -81,6 +81,11 @@ class SecurityMoney(BaseModel):
     maturity_date = models.DateField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return self.tender.project_name
+    class Meta:
+        ordering = ('-created_at',)
+
 
 class TenderPg(BaseModel):  # Pg = performance gurantee
     tender = models.OneToOneField(TenderProject, on_delete=models.CASCADE)
@@ -90,6 +95,11 @@ class TenderPg(BaseModel):  # Pg = performance gurantee
     is_withdraw = models.BooleanField(default=False)
     maturity_date = models.DateField()  # Expire date of pg
     remarks = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.tender.project_name
+    class Meta:
+        ordering = ('-created_at',)
 
 
 class CostMainHead(models.Model):
@@ -159,7 +169,7 @@ class LoanInformation(BaseModel):
     
 
     def __str__(self):
-        return f"{self.account_no} : {self.bank_name}"
+        return f"{self.borrower_name} : {self.amount}"
 
 
 class DailyExpendiature(BaseModel):
@@ -196,11 +206,11 @@ class DailyExpendiature(BaseModel):
     
 
 class MoneyReceived(BaseModel):
-    project = models.ForeignKey(TenderProject, on_delete=models.PROTECT, related_name='project_money_received')
+    project = models.ForeignKey(TenderProject, on_delete=models.PROTECT, related_name='project_money_received', blank=True, null=True)
     retention_money = models.ForeignKey(RetensionMoney, on_delete=models.PROTECT, blank=True, null=True)  # as like security  money.
     bank_info = models.ForeignKey(BankInformation, on_delete=models.PROTECT, related_name='bank_money_received', blank=True, null=True)
 
-    security_money = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_received', null=True, blank=True)
+    tender_security = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_received', null=True, blank=True)
     performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_received', null=True, blank=True)
     loan_info = models.ForeignKey(LoanInformation, on_delete=models.PROTECT, related_name='loan_received', null=True, blank=True)
     cash_balance = models.ForeignKey(CashBalance, on_delete=models.PROTECT, related_name='cash_received', null=True, blank=True)

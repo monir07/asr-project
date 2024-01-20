@@ -10,8 +10,8 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
-from .forms import (TenderProjectForm)
-from .models import (TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature)
+from .forms import (TenderProjectForm, LoanInformationsForm)
+from .models import (TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, LoanInformation)
 
 
 # Create your views here.
@@ -186,6 +186,30 @@ class CostHeadUpdateView(generic.UpdateView):
         context['basic_template'] = ''
         context['title'] = self.title
         return context
+
+
+class LoanInformationCreateView(generic.CreateView):
+    model = LoanInformation
+    form_class = LoanInformationsForm
+    template_name = 'tender/tender_project/form.html'
+    success_message = "Created Successfully."
+    title = 'Loan Pay Create Form'
+    success_url = "tender_project_list"
+    
+    def form_valid(self, form, *args, **kwargs):
+        self.object = form.save(commit=False)
+        self.object.created_by = self.request.user
+        with transaction.atomic():
+            form.save()
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(reverse_lazy(self.success_url))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['basic_template'] = ""
+        context['title'] = self.title
+        return context
+
 
 import os
 from io import BytesIO

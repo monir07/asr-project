@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Button
-from .models import (ProjectSiteEngineer, TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, BankInformation)
+from .models import (ProjectSiteEngineer, TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, BankInformation, LoanInformation, PaidMethodOption)
 
 
 class SiteEngineerForm(forms.ModelForm):
@@ -266,3 +266,51 @@ def get_cost_head_form(model_class):
             model = model_class
             exclude = ('created_at','updated_at','slug')
     return CostHeadForm
+
+
+class LoanInformationsForm(forms.ModelForm):
+        class Meta:
+            model = LoanInformation
+            fields = ('borrower_name','loan_type','amount','bank_name','cheque_no')
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['loan_type'].widget.attrs['class'] ='select2_single form-control'
+
+
+            self.helper = FormHelper()    
+            self.helper.form_method = 'post'
+            self.helper.layout = Layout(
+                Row(
+                    Column('borrower_name', css_class='form-group col-md-6 mb-0'),
+                    Column('amount', css_class='form-group col-md-6 mb-0'),
+                    css_class='row'
+                ),
+                Row(
+                    Column('loan_type', css_class='form-group col-md-4 mb-0'),
+                    Column('bank_name', css_class='form-group col-md-4 mb-0'),
+                    Column('cheque_no', css_class='form-group col-md-4 mb-0'),
+                    css_class='row'
+                ),
+                Row(
+                    Column(Button('cancel', 'Go Back', css_class='btn-secondary btn-block', onclick="history.back()"), css_class='form-group col-md-3'),
+                    Column(Submit('submit', 'Continue', css_class='btn-primary btn-block'), css_class='form-group col-md-3'),
+                    css_class='row'
+                ),
+            )
+        
+        def clean(self):
+            cleaned_data = super().clean()
+            loan_type = cleaned_data.get('loan_type')
+
+            if loan_type == PaidMethodOption.BANK:
+                bank_name = cleaned_data.get('bank_name')
+                cheque_no = cleaned_data.get('cheque_no')
+                if not bank_name:
+                    self.add_error('bank_name', 'Bank name is required for Bank loan type.')
+                    self.fields['bank_name'].widget.attrs['class'] = 'parsley-error'
+
+                if not cheque_no:
+                    self.add_error('cheque_no', 'Cheque number is required for Bank loan type.')
+                    self.fields['cheque_no'].widget.attrs['class'] = 'parsley-error'
+            return cleaned_data

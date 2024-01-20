@@ -245,7 +245,21 @@ urlpatterns = [
     model = BankInformation,
     success_url = 'bank_info_list',
     ), name='bank_info_delete'),
-
+    
+    # -- LOAN INFORMATION URLS -- 
+    path('loan-info-create/', LoanInformationCreateView.as_view(
+    success_url = "loan_info_list",
+    ), name='loan_info_create'),
+    
+    path('loan-info-list/', TenderProjectListView.as_view(
+    model = LoanInformation,
+    queryset = LoanInformation.objects.all(),
+    search_fields = ['borrower_name', 'bank_name', 'loan_type'],
+    list_display = ['borrower_name','amount','loan_type','bank_name','cheque_no'],
+    url_list = ['bank_info_update', 'bank_info_delete', 'bank_info_details'],
+    title = 'Loan Information List',
+    ), name='loan_info_list'),
+    
     # Make pdf urls
     path('make-pdf/', render_pdf_view, name='generate_pdf'),
 ]
