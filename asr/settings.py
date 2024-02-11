@@ -33,7 +33,7 @@ DEFAULTS_APPS = [
 ]
 
 LOCAL_APPS = ['tender', 'custom_auth']
-THIRD_PARTY_APPS = ['crispy_forms']
+THIRD_PARTY_APPS = ['crispy_forms', 'crispy_bootstrap4']
 INSTALLED_APPS = DEFAULTS_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

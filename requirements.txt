@@ -1,9 +1,9 @@
 Django
-Pillow==9.2.0
+pillow
 python-dotenv==0.21.0
-psycopg2-binary==2.9.3
-django-crispy-forms==1.14.0
-django-formtools==2.3
+psycopg2-binary
+django-crispy-forms
+crispy-bootstrap4
+django-formtools
 pycairo==1.23.0
-reportlab==4.0.0
-xhtml2pdf==0.2.11
+xhtml2pdf
