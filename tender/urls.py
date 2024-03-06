@@ -250,13 +250,16 @@ urlpatterns = [
     path('loan-info-create/', LoanInformationCreateView.as_view(
     success_url = "loan_info_list",
     ), name='loan_info_create'),
+    path('loan-info-update/<int:pk>', LoanPayUpdateView.as_view(
+    success_url = "loan_info_list",
+    ), name='loan_info_update'),
     
     path('loan-info-list/', TenderProjectListView.as_view(
     model = LoanInformation,
     queryset = LoanInformation.objects.all(),
-    search_fields = ['borrower_name', 'bank_name', 'loan_type'],
-    list_display = ['borrower_name','amount','loan_type','bank_name','cheque_no'],
-    url_list = ['bank_info_update', 'bank_info_delete', 'bank_info_details'],
+    search_fields = ['borrower_name', 'bank_name', 'payment_option'],
+    list_display = ['borrower_name','amount','payment_option','bank_name','cheque_no'],
+    url_list = ['loan_info_update', 'bank_info_delete', 'bank_info_details'],
     title = 'Loan Information List',
     ), name='loan_info_list'),
     

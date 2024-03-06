@@ -30,9 +30,8 @@ class ProjectExpendiatureForm(forms.ModelForm):
                     css_class='row'
                 ),
                 Row(
-                    Column('paid_method', css_class='form-group col-md-4 mb-0'),
-                    Column('expendiature_type', css_class='form-group col-md-4 mb-0'),
-                    Column('paid_amount', css_class='form-group col-md-4 mb-0'),
+                    Column('paid_method', css_class='form-group col-md-6 mb-0'),
+                    Column('paid_amount', css_class='form-group col-md-6 mb-0'),
                     css_class='row'
                 ),
                 Row(
@@ -56,7 +55,7 @@ class ProjectExpendiatureForm(forms.ModelForm):
         
         class Meta:
             model = DailyExpendiature
-            fields = ('project', 'site_engier','main_head', 'sub_head', 'quantity', 'unit', 'paid_method', 'expendiature_type',
+            fields = ('project', 'site_engier','main_head', 'sub_head', 'quantity', 'unit', 'paid_method',
                     'paid_amount', 'due_amount', 'total_amount', 'date', 'remarks', 'bank_info', 'cheque_no')
 
 
@@ -89,8 +88,5 @@ class LoanExpendiatureForm(forms.ModelForm):
             attrs={'type': 'date'}))
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.fields['project'].widget.attrs['class'] ='select2_single form-control'
             self.fields['loan_info'].widget.attrs['class'] ='select2_single form-control'
-            self.fields['main_head'].widget.attrs['class'] ='select2_single form-control'
-            self.fields['sub_head'].widget.attrs['class'] ='select2_single form-control'
-            self.fields['remarks'].widget.attrs['rows'] ='2'
+            

@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
 from ..models import DailyExpendiature
-from .forms import ProjectExpendiatureForm
+from .forms import *
 
 class ExpendatureDashboardView(generic.TemplateView):
     title = 'Expendature Dashboard'
@@ -80,7 +80,7 @@ class ExpenditureListView(generic.ListView):
     template_name = 'tender/tender_project/list.html'
     queryset = DailyExpendiature.objects.filter()
     search_fields = ['project_name', 'job_no']
-    list_display = ['total_amount', 'paid_method', 'expendiature_type']
+    list_display = ['total_amount', 'paid_method']
     url_list = ['tender_project_update', 'tender_project_delete', 'tender_project_details']
 
     def get_queryset(self):

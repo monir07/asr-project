@@ -271,11 +271,11 @@ def get_cost_head_form(model_class):
 class LoanInformationsForm(forms.ModelForm):
         class Meta:
             model = LoanInformation
-            fields = ('borrower_name','loan_type','amount','bank_name','cheque_no')
+            fields = ('borrower_name','payment_option','amount','bank_name','cheque_no')
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.fields['loan_type'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['payment_option'].widget.attrs['class'] ='select2_single form-control'
 
 
             self.helper = FormHelper()    
@@ -287,7 +287,7 @@ class LoanInformationsForm(forms.ModelForm):
                     css_class='row'
                 ),
                 Row(
-                    Column('loan_type', css_class='form-group col-md-4 mb-0'),
+                    Column('payment_option', css_class='form-group col-md-4 mb-0'),
                     Column('bank_name', css_class='form-group col-md-4 mb-0'),
                     Column('cheque_no', css_class='form-group col-md-4 mb-0'),
                     css_class='row'

@@ -194,13 +194,23 @@ class LoanInformationCreateView(generic.CreateView):
     template_name = 'tender/tender_project/form.html'
     success_message = "Created Successfully."
     title = 'Loan Pay Create Form'
-    success_url = "tender_project_list"
+    success_url = "loan_info_list"
     
     def form_valid(self, form, *args, **kwargs):
         self.object = form.save(commit=False)
         self.object.created_by = self.request.user
+        expendature_obj = DailyExpendiature()
+        expendature_obj.loan_info = self.object
+        expendature_obj.quantity = 1
+        expendature_obj.unit = 'na'
+        expendature_obj.paid_amount = form.cleaned_data['amount']
+        expendature_obj.due_amount = 0
+        expendature_obj.total_amount = form.cleaned_data['amount']
+        expendature_obj.paid_method = form.cleaned_data['payment_option']
+        expendature_obj.created_by = self.request.user
         with transaction.atomic():
             form.save()
+            expendature_obj.save()
         messages.success(self.request, self.success_message)
         return HttpResponseRedirect(reverse_lazy(self.success_url))
     
@@ -209,6 +219,31 @@ class LoanInformationCreateView(generic.CreateView):
         context['basic_template'] = ""
         context['title'] = self.title
         return context
+
+
+class LoanPayUpdateView(generic.UpdateView):
+    model = LoanInformation
+    form_class = LoanInformationsForm
+    context_object_name = 'instance'
+    template_name = 'tender/tender_project/form.html'
+    success_message = "Updated Successfully."
+    title = 'Loan Pay Update Form'
+    success_url = "loan_info_list"
+
+
+    def form_valid(self, form, *args, **kwargs):
+        self.object = form.save(commit=False)
+        self.object.updated_by = self.request.user
+        self.object.save()
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(reverse_lazy(self.success_url))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['basic_template'] = ''
+        context['title'] = self.title
+        return context
+
 
 
 import os

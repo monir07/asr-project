@@ -177,13 +177,13 @@ class CashBalance(BaseModel):
 class LoanInformation(BaseModel):
     borrower_name = models.CharField(max_length=150)
     payment_option = models.CharField(max_length=30, choices=PaidMethodOption.choices)
-    loan_type = models.CharField(max_length=20, choices=LoanOption.choices)
+    # loan_type = models.CharField(max_length=20, choices=LoanOption.choices)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     remarks = models.TextField(null=True, blank=True)
     
     # if loan type is banking system then fill bank and cheque no.
-    bank_name = models.CharField(max_length=80, null=True, blank=True)
     account_no = models.CharField(max_length=40, null=True, blank=True)
+    bank_name = models.CharField(max_length=80, null=True, blank=True)
     cheque_no = models.CharField(max_length=50, null=True, blank=True)
     
 
@@ -210,7 +210,7 @@ class DailyExpendiature(BaseModel):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)  # total amount = paid + due.
     """ if paid method is due then it does not increse cash balance or bank balance """
     paid_method = models.CharField(max_length=30, choices=PaidMethodOption.choices)
-    expendiature_type = models.CharField(max_length=30, choices=ExpendiatureOption.choices)
+    # expendiature_type = models.CharField(max_length=30, choices=ExpendiatureOption.choices)
     date = models.DateField(default=timezone.now)
     remarks = models.TextField(null=True, blank=True)
     """ if paid method is bank then it does decrese bank balance """
@@ -232,6 +232,7 @@ class MoneyReceived(BaseModel):
     tender_security = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_received', null=True, blank=True)
     performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_received', null=True, blank=True)
     loan_info = models.ForeignKey(LoanInformation, on_delete=models.PROTECT, related_name='loan_received', null=True, blank=True)
+    loan_type = models.CharField(max_length=20, choices=LoanOption.choices,  null=True, blank=True)
     cash_balance = models.ForeignKey(CashBalance, on_delete=models.PROTECT, related_name='cash_received', null=True, blank=True)
     
     """ if received method is bank then it does increse bank balance and need revceived cheque and bank name. """
@@ -239,6 +240,7 @@ class MoneyReceived(BaseModel):
     total_amount = models.DecimalField(max_digits=13, decimal_places=2)
     recieved_cheque_no = models.CharField(max_length=150, null=True, blank=True)
     recieved_bank_name = models.CharField(max_length=150, null=True, blank=True)
+    account_no = models.CharField(max_length=40, null=True, blank=True)
     check_attachment = models.FileField(upload_to='check_attachment/', blank=True, null=True)
     
     deduction_of_vat = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)

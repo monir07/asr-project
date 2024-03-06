@@ -129,11 +129,11 @@ class PgReceivedForm(forms.ModelForm):
         return cleaned_data
 
 
-class LoanReceivedForm(forms.ModelForm):
+class LoanCollectionForm(forms.ModelForm):
     class Meta:
         model = MoneyReceived
-        fields = ('loan_info','total_amount', 'received_method', 
-                'recieved_cheque_no', 'recieved_bank_name', 'check_attachment', 'bank_info', 'cash_balance')
+        fields = ('loan_info','total_amount', 'received_method', 'account_no',
+                'recieved_cheque_no', 'recieved_bank_name', 'bank_info', 'cash_balance', 'check_attachment')
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -142,6 +142,7 @@ class LoanReceivedForm(forms.ModelForm):
         self.fields['loan_info'].label ='Select Loan Borrower'
         self.fields['bank_info'].label ='Select deposit bank'
         self.fields['cash_balance'].label ='Select cash balance'
+        self.fields['account_no'].label ='Received Account No'
         self.fields['received_method'].widget.attrs['class'] ='select2_single form-control'
         self.fields['bank_info'].widget.attrs['class'] ='select2_single form-control'
         self.fields['cash_balance'].widget.attrs['class'] ='select2_single form-control'
