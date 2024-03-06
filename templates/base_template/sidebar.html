@@ -1,7 +1,10 @@
 {% load static %}
 <div class="left_col">
   <div class="navbar nav_title" style="border: 0;">
-    <a href="{% url 'dashboard' %}" class="site_title"><i class="fa fa-certificate"></i> <span>ASR</span></a>
+    <a href="{% url 'dashboard' %}" class="site_title">
+      <img src="{% static 'image/logo.png' %}" alt="company logo" class="img-fluid img-thumbnai" style="width: 70px; height:40px">
+      <span>Technologies</span>
+    </a>
   </div>
 
   <div class="clearfix"></div>
