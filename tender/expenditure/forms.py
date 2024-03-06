@@ -12,6 +12,8 @@ class ProjectExpendiatureForm(forms.ModelForm):
             self.fields['site_engier'].widget.attrs['class'] ='select2_single form-control'
             self.fields['main_head'].widget.attrs['class'] ='select2_single form-control'
             self.fields['sub_head'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['paid_method'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['bank_info'].widget.attrs['class'] ='select2_single form-control'
             self.fields['remarks'].widget.attrs['rows'] ='2'
             self.helper = FormHelper()    
             self.helper.form_method = 'post'

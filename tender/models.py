@@ -94,7 +94,7 @@ class SecurityMoney(BaseModel):
     is_withdraw = models.BooleanField(default=False)
     maturity_date = models.DateField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
-    bank_details = models.CharField(max_length=80, null=True, blank=True)
+    bank_details = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.tender.project_name
@@ -104,13 +104,13 @@ class SecurityMoney(BaseModel):
 
 class TenderPg(BaseModel):  # Pg = performance gurantee
     tender = models.OneToOneField(TenderProject, on_delete=models.CASCADE)
-    pg_type = models.CharField(max_length=30, choices=ReceivedOption.choices)
+    pg_type = models.CharField(max_length=30, choices=SecurityOption.choices)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     paid_amount = models.DecimalField(max_digits=12, decimal_places=2)
     is_withdraw = models.BooleanField(default=False)
     maturity_date = models.DateField()  # Expire date of pg
     remarks = models.TextField(null=True, blank=True)
-    bank_details = models.CharField(max_length=80, null=True, blank=True)
+    bank_details = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.tender.project_name

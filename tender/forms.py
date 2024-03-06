@@ -1,7 +1,10 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Button
-from .models import (ProjectSiteEngineer, TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, BankInformation, LoanInformation, PaidMethodOption)
+from .models import (ProjectSiteEngineer, TenderProject, 
+                    RetensionMoney, SecurityMoney, TenderPg, CostMainHead,
+                    CostSubHead, DailyExpendiature, BankInformation, 
+                    LoanInformation, PaidMethodOption, SecurityOption)
 
 
 class SiteEngineerForm(forms.ModelForm):
@@ -147,8 +150,11 @@ class SecurityMoneyForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields['tender'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['security_type'].widget.attrs['class'] ='select2_single form-control'
             self.fields['tender'].label ='Select Tender Project'
+            self.fields['bank_details'].widget.attrs['rows'] ='2'
             self.fields['remarks'].widget.attrs['rows'] ='2'
+            self.fields['is_withdraw'].help_text ='Checked, when received security money.'
             self.helper = FormHelper()    
             self.helper.form_method = 'post'
             self.helper.form_id = 'id_checkout_form'
@@ -159,13 +165,15 @@ class SecurityMoneyForm(forms.ModelForm):
                     css_class='row'
                 ),
                 Row(
-                    Column('paid_amount', css_class='form-group col-md-6 mb-0'),
-                    Column('is_withdraw', css_class='form-group col-md-6 mb-0'),
+                    Column('paid_amount', css_class='form-group col-md-4 mb-0'),
+                    Column('security_type', css_class='form-group col-md-4 mb-0'),
+                    Column('maturity_date', css_class='form-group col-md-4 mb-0'),
                     css_class='row'
                 ),
                 Row(
-                    Column('maturity_date', css_class='form-group col-md-6 mb-0'),
-                    Column('remarks', css_class='form-group col-md-6 mb-0'),
+                    Column('bank_details', css_class='form-group col-md-4 mb-0'),
+                    Column('remarks', css_class='form-group col-md-4 mb-0'),
+                    Column('is_withdraw', css_class='form-group col-md-4 mb-0'),
                     css_class='row'
                 ),
                 Row(
@@ -177,7 +185,18 @@ class SecurityMoneyForm(forms.ModelForm):
         
         class Meta:
             model = SecurityMoney
-            fields = ('tender', 'amount', 'paid_amount', 'is_withdraw', 'maturity_date', 'remarks',)
+            fields = ('tender', 'amount', 'paid_amount', 'security_type', 'is_withdraw', 'maturity_date', 'remarks', 'bank_details')
+
+        def clean(self):
+            cleaned_data = super().clean()
+            security_type = cleaned_data.get('security_type')
+
+            if security_type == SecurityOption.BANK:
+                bank_details = cleaned_data.get('bank_details')
+                if not bank_details:
+                    self.add_error('bank_details', 'Bank details is required for Bank type.')
+                    self.fields['bank_details'].widget.attrs['class'] = 'parsley-error'
+            return cleaned_data
 
 
 class TenderPgForm(forms.ModelForm):
@@ -189,6 +208,8 @@ class TenderPgForm(forms.ModelForm):
             self.fields['pg_type'].widget.attrs['class'] ='select2_single form-control'
             self.fields['tender'].label ='Select Tender Project'
             self.fields['remarks'].widget.attrs['rows'] ='2'
+            self.fields['bank_details'].widget.attrs['rows'] ='2'
+            self.fields['is_withdraw'].help_text ='Checked, when received PG.'
             self.helper = FormHelper()    
             self.helper.form_method = 'post'
             self.helper.form_id = 'id_checkout_form'
@@ -199,14 +220,16 @@ class TenderPgForm(forms.ModelForm):
                     css_class='row'
                 ),
                 Row(
-                    Column('paid_amount', css_class='form-group col-md-6 mb-0'),
-                    Column('pg_type', css_class='form-group col-md-3 mb-0'),
-                    Column('is_withdraw', css_class='form-group col-md-3 mb-0'),
+                    Column('paid_amount', css_class='form-group col-md-4 mb-0'),
+                    Column('pg_type', css_class='form-group col-md-4 mb-0'),
+                    Column('maturity_date', css_class='form-group col-md-4 mb-0'),
+                    
                     css_class='row'
                 ),
                 Row(
-                    Column('maturity_date', css_class='form-group col-md-6 mb-0'),
-                    Column('remarks', css_class='form-group col-md-6 mb-0'),
+                    Column('bank_details', css_class='form-group col-md-4 mb-0'),
+                    Column('remarks', css_class='form-group col-md-4 mb-0'),
+                    Column('is_withdraw', css_class='form-group col-md-4 mb-0'),
                     css_class='row'
                 ),
                 Row(
@@ -218,7 +241,19 @@ class TenderPgForm(forms.ModelForm):
         
         class Meta:
             model = TenderPg
-            fields = ('tender', 'pg_type','amount', 'paid_amount', 'is_withdraw', 'maturity_date', 'remarks',)
+            fields = ('tender', 'pg_type','amount', 'paid_amount', 'is_withdraw', 
+                    'maturity_date', 'remarks', 'bank_details')
+        
+        def clean(self):
+            cleaned_data = super().clean()
+            pg_type = cleaned_data.get('pg_type')
+
+            if pg_type == SecurityOption.BANK:
+                bank_details = cleaned_data.get('bank_details')
+                if not bank_details:
+                    self.add_error('bank_details', 'Bank details is required for Bank type.')
+                    self.fields['bank_details'].widget.attrs['class'] = 'parsley-error'
+            return cleaned_data
 
 
 
@@ -301,9 +336,9 @@ class LoanInformationsForm(forms.ModelForm):
         
         def clean(self):
             cleaned_data = super().clean()
-            loan_type = cleaned_data.get('loan_type')
+            payment_option = cleaned_data.get('payment_option')
 
-            if loan_type == PaidMethodOption.BANK:
+            if payment_option == PaidMethodOption.BANK:
                 bank_name = cleaned_data.get('bank_name')
                 cheque_no = cleaned_data.get('cheque_no')
                 if not bank_name:

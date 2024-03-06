@@ -18,7 +18,7 @@ class BillReceivedDashboardView(generic.TemplateView):
     url_list = {
                 'url_1':['all_bill_receive', 'Bill Received', 'fa fa-caret-square-o-right'],
                 'url_2':['received_security_money_create', 'Tender Security', 'fa fa-comments-o'],
-                'url_3':['received_pg_create', 'Tender Performance Guarantee', 'fa fa-sort-amount-desc'],
+                'url_3':['received_pg_create', 'Tender PG', 'fa fa-sort-amount-desc'],
                 'url_4':['collection_loan_create', 'Loan Collection', 'fa fa-check-square-o'],
                 'url_5':['received_loan_create', 'Loan Received', 'fa fa-cart-arrow-down'],
             }
