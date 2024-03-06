@@ -10,25 +10,12 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
+from asr.utility import format_search_string, get_fields
 from .forms import (TenderProjectForm, LoanInformationsForm)
 from .models import (TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, LoanInformation)
 
 
 # Create your views here.
-def format_search_string(fields, keyword):
-    Qr = None
-    for field in fields:        
-        q = Q(**{"%s__icontains" % field: keyword })
-        if Qr:
-            Qr = Qr | q
-        else:
-            Qr = q
-    
-    return Qr
-
-def get_fields(model, fieldnames):
-    return [model._meta.get_field(field) for field in fieldnames]
-
 class TenderProjectCreateView(LoginRequiredMixin, generic.CreateView):
     model = TenderProject
     form_class = TenderProjectForm

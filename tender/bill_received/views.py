@@ -11,6 +11,7 @@ from django.template import loader
 from django.http import HttpResponse
 from ..models import MoneyReceived, LoanOption
 from .forms import *
+from asr.utility import format_search_string, get_fields
 
 class BillReceivedDashboardView(generic.TemplateView):
     title = 'Received Money Dashboard'
@@ -212,4 +213,34 @@ class BillReceivedCreateView(generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
+        return context
+
+
+class MoneyReceivedListView(generic.ListView):
+    title = 'Daily Expendaure List'
+    model = MoneyReceived
+    context_object_name = 'items'
+    paginate_by = 10
+    template_name = 'tender/tender_project/list.html'
+    queryset = MoneyReceived.objects.filter()
+    search_fields = ['project_name', 'job_no']
+    list_display = ['total_amount', 'paid_method', 'date']
+    url_list = ['expenditure_form_update', 'expenditure_delete', 'expenditure_details']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query_param = self.request.GET.copy()
+        search_param = query_param.get('query', None)
+        if search_param:
+            Qr = format_search_string(self.search_fields, search_param)
+            queryset = queryset.filter(Qr)
+        return queryset
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        context['fields'] = get_fields(self.model, self.list_display)
+        context['update_url'] = self.url_list[0]
+        context['delete_url'] = self.url_list[1]
+        context['details_url'] = self.url_list[2]
         return context
