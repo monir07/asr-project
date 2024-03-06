@@ -22,6 +22,7 @@ class BillReceivedDashboardView(generic.TemplateView):
                 'url_3':['received_pg_create', 'Tender PG', 'fa fa-sort-amount-desc'],
                 'url_4':['collection_loan_create', 'Loan Collection', 'fa fa-check-square-o'],
                 'url_5':['received_loan_create', 'Loan Received', 'fa fa-cart-arrow-down'],
+                'url_6':['all_received_list', 'Received List', 'fa fa-list'],
             }
 
     def get_context_data(self, **kwargs):
@@ -217,14 +218,14 @@ class BillReceivedCreateView(generic.CreateView):
 
 
 class MoneyReceivedListView(generic.ListView):
-    title = 'Daily Expendaure List'
+    title = 'Money Received List'
     model = MoneyReceived
     context_object_name = 'items'
     paginate_by = 10
     template_name = 'tender/tender_project/list.html'
     queryset = MoneyReceived.objects.filter()
-    search_fields = ['project_name', 'job_no']
-    list_display = ['total_amount', 'paid_method', 'date']
+    search_fields = ['project', 'received_method']
+    list_display = ['total_amount', 'received_method', 'received_amount']
     url_list = ['expenditure_form_update', 'expenditure_delete', 'expenditure_details']
 
     def get_queryset(self):
