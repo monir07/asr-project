@@ -26,6 +26,19 @@ class ExpendiatureOption(models.TextChoices):
     DEBIT = 'debit', 'Debit'
 
 
+class LoanOption(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    PAY = 'pay', 'Pay'
+    RECEIVE = 'receive', 'Received'
+    COLLECTION = 'collection', 'Collection'
+
+class SecurityOption(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    CASH = 'cash', 'Cash'
+    BANK = 'bank', 'Bank'
+    PAY_ORDER = 'pay_order', 'Pay Order'
+
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
@@ -77,9 +90,11 @@ class SecurityMoney(BaseModel):
     tender = models.OneToOneField(TenderProject, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     paid_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    security_type = models.CharField(max_length=20, choices=SecurityOption.choices)
     is_withdraw = models.BooleanField(default=False)
     maturity_date = models.DateField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
+    bank_details = models.CharField(max_length=80, null=True, blank=True)
 
     def __str__(self):
         return self.tender.project_name
@@ -95,6 +110,7 @@ class TenderPg(BaseModel):  # Pg = performance gurantee
     is_withdraw = models.BooleanField(default=False)
     maturity_date = models.DateField()  # Expire date of pg
     remarks = models.TextField(null=True, blank=True)
+    bank_details = models.CharField(max_length=80, null=True, blank=True)
 
     def __str__(self):
         return self.tender.project_name
@@ -160,12 +176,15 @@ class CashBalance(BaseModel):
 
 class LoanInformation(BaseModel):
     borrower_name = models.CharField(max_length=150)
-    loan_type = models.CharField(max_length=30, choices=PaidMethodOption.choices)
+    payment_option = models.CharField(max_length=30, choices=PaidMethodOption.choices)
+    loan_type = models.CharField(max_length=20, choices=LoanOption.choices)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
+    remarks = models.TextField(null=True, blank=True)
     
     # if loan type is banking system then fill bank and cheque no.
-    bank_name = models.CharField(max_length=150, null=True, blank=True)
-    cheque_no = models.CharField(max_length=150, null=True, blank=True)
+    bank_name = models.CharField(max_length=80, null=True, blank=True)
+    account_no = models.CharField(max_length=40, null=True, blank=True)
+    cheque_no = models.CharField(max_length=50, null=True, blank=True)
     
 
     def __str__(self):
