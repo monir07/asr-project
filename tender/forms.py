@@ -4,8 +4,8 @@ from crispy_forms.layout import Layout, Submit, Row, Column, Button
 from .models import (ProjectSiteEngineer, TenderProject, 
                     RetensionMoney, SecurityMoney, TenderPg, CostMainHead,
                     CostSubHead, DailyExpendiature, BankInformation, 
-                    LoanInformation, PaidMethodOption, SecurityOption)
-
+                    LoanInformation, PaidMethodOption, SecurityOption, UserProfile)
+from custom_auth.validator import MyValidator
 
 class SiteEngineerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -349,3 +349,31 @@ class LoanInformationsForm(forms.ModelForm):
                     self.add_error('cheque_no', 'Cheque number is required for Bank loan type.')
                     self.fields['cheque_no'].widget.attrs['class'] = 'parsley-error'
             return cleaned_data
+
+
+class UserProfileForm(forms.ModelForm):
+        date_of_birth = forms.DateField(widget=forms.DateInput(
+            attrs={'type': 'date'}))
+        date_of_join = forms.DateField(widget=forms.DateInput(
+            attrs={'type': 'date'}))
+        profile_img = forms.ImageField(#widget=forms.ClearableFileInput(), required=False, 
+            validators=[MyValidator(allowed_extensions=['jpg', 'png', 'jpeg'],  
+            allowed_size=2, 
+            message=None, code=None)], 
+            help_text="File size should be less than 2MB with ().jpg .png .jpeg) extension. size 300x300 px")
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['religion'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['marital_status'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['gender'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['blood_group'].widget.attrs['class'] ='select2_single form-control'
+        
+        class Meta:
+            model = UserProfile
+            fields = ('profile_img', 'father_name', 'mother_name', 
+                      'designation', 'nid_no', 'phone_no', 'religion', 
+                      'marital_status', 'gender', 'blood_group', 'date_of_birth',
+                      'date_of_join', 'address',
+                      )
+
+        

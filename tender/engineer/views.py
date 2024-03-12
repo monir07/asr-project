@@ -10,7 +10,8 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from ..models import ProjectSiteEngineer
-from .forms import SiteEngineerForm
+from .forms import (SiteEngineerForm, UserRegisterForm)
+from ..forms import UserProfileForm
 from formtools.wizard.views import SessionWizardView
 
 
@@ -20,13 +21,18 @@ class SiteEngineerCreateView(SessionWizardView):
     template_name = 'authentication/registration_final.html'
     success_message = "Profile Created Successfully!"
     title = "Create Site Engineer Profile."
+    form_list = [UserRegisterForm, UserProfileForm]
 
     def done(self, form_list, **kwargs):
         with transaction.atomic():
             if form_list[0].is_valid():
                 user = form_list[0].save()
-                ProjectSiteEngineer.objects.create(user=user, balance=0, created_by=self.request.user)
-                # user = form_list[1].save()
+                user_inform_form = form_list[1].save(commit=False)
+                user_inform_form.user = user
+                user_inform_form.created_by = self.user
+                user_inform_form.save()
+                # user = form_list[0].save()
+                # ProjectSiteEngineer.objects.create(user=user, balance=0, created_by=self.request.user)
                 messages.success(self.request, self.success_message)
             else:
                 messages.error(self.request, 'Something Went Wrong!')

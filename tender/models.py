@@ -4,6 +4,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify 
+from django.utils.html import format_html
+from PIL import Image
+
 User = get_user_model()
 
 ignore_fields = ['id', 'project_complete', 'created_at', 'updated_at', 'created_by', 'updated_by', 'basemodel_ptr']
@@ -38,12 +41,82 @@ class SecurityOption(models.TextChoices):
     BANK = 'bank', 'Bank'
     PAY_ORDER = 'pay_order', 'Pay Order'
 
+class ReligionOptions(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    ISLAM = 'ISLAM', 'Islam'
+    HINDU = 'HINDU', 'Hindu'
+    CHRISTIAN = 'CHRISTIAN', 'Christian'
+    BUDDHIST = 'BUDDHIST', 'Buddhist'
+    OTHERS = 'OTHERS', 'Others'
+
+class GenderOptions(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    MALE = 'MALE', 'Male'
+    FEMALE = 'FEMALE', 'Female'
+    OTHERS = 'OTHERS', 'Others'
+
+class MaritalOptions(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    MARRIED = 'MARRIED', 'Married'
+    SINGLE = 'SINGLE', 'Single'
+    DIVORCED = 'DIVORCED', 'Divorced'
+
+class BloodGroupOptions(models.TextChoices):
+    """ CONSTANT = DB_VALUE, USER_DISPLAY_VALUE """
+    A_POSITIVE = 'A+', 'A+'
+    A_NEGATIVE = 'A-', 'A-'
+    B_POSITIVE = 'B+', 'B+'
+    B_NEGATIVE = 'B-', 'B-'
+    O_POSITIVE = 'O+', 'O+'
+    O_NEGATIVE = 'O-', 'O-'
+    AB_POSITIVE = 'AB+', 'AB+'
+    AB_NEGATIVE = 'AB-', 'AB-'            
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='created_%(class)ss')
     updated_by = models.ForeignKey(User, on_delete=models.PROTECT,  related_name='updated_%(class)ss', null=True, blank=True)
+
+
+class UserProfile(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
+    profile_img = models.ImageField(default = 'profile_img/default.jpg', upload_to='profile_img/')
+    father_name = models.CharField(max_length=100)
+    mother_name = models.CharField(max_length=100)
+    designation = models.CharField(max_length=100)
+    nid_no = models.CharField(max_length=100, unique=True)
+    phone_no = models.CharField(max_length=100)
+    religion = models.CharField(max_length=20, choices=ReligionOptions.choices)
+    marital_status = models.CharField(max_length=20, choices=MaritalOptions.choices)
+    gender = models.CharField(max_length=15, choices=GenderOptions.choices)
+    blood_group = models.CharField(max_length=15, choices=BloodGroupOptions.choices)
+    date_of_birth = models.DateField()
+    date_of_join = models.DateField()
+    address = models.TextField(max_length=250)
+
+    def __str__(self):
+        return str(self.user.get_full_name())
+
+    def image_tag(self):
+        return format_html('<img src="/media/{}" width = "50" height = "50"/>', self.profile_img)
+
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True
+
+    def save(self, *args, **kwargs):
+        super(UserProfile, self).save(*args, **kwargs)
+        try:
+            if self.profile_img:
+                img = Image.open(self.profile_img.path)
+                if img.height > 300 or img.width > 300:
+                    image_size = (300, 300)
+                    img.thumbnail(image_size)
+                    img.save(self.profile_img.path)
+        except Exception as e:
+            pass
+            # print(str(e))
 
 
 class ProjectSiteEngineer(BaseModel):
