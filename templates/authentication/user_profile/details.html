@@ -1,5 +1,6 @@
 {% extends "base_template/base_site.html" %}
 {% load static %}
+{% load custom_tag %}
 
 {% block content %}
 <div class="right_col" role="main" id="pdf_content">
@@ -51,13 +52,28 @@
                             </thead>
                             <tbody>
                                 {% for name, value in instance.get_fields %}
+                                {% if value != 'None' and value|length > 0 and name not in "profile_img" %}
+                                    {% if name == 'user' %}
                                     <tr>
-                                        <td>{{ name }}</td>
-                                        <td class="text-wrap">{{ value }}</td>
+                                        <td>{{ name|capitalize_under }}</td>
+                                        <td class="text-wrap">{{ instance.user }}</td>
                                     </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td>{{ name|capitalize_under }}</td>
+                                        <td class="text-wrap">{{ value|title }}</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
+                    </div>
+                    <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img class="img-responsive avatar-view" src="/media/{{ instance.profile_img }}" alt="Avatar" title="Change the avatar">
+                        </div>
                     </div>
                 </div>
             </div>
