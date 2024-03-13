@@ -105,6 +105,25 @@ class Dashboard(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
+        return context
+
+
+from asr.utility import format_search_string, get_fields
+class UserListView(LoginRequiredMixin, generic.ListView):
+    title = 'All User List'
+    model = User
+    context_object_name = 'items'
+    # paginate_by = 9
+    template_name = 'tender/tender_project/list.html'
+    list_display = ['username', 'first_name', 'last_name']
+    url_list = ['tender_project_details']
+    # queryset = User.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        context['fields'] = get_fields(self.model, self.list_display)
+        context['details_url'] = self.url_list[0]
         return context    
 
 def index(request):

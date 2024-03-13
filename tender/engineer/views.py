@@ -26,10 +26,10 @@ class SiteEngineerCreateView(SessionWizardView):
     def done(self, form_list, **kwargs):
         with transaction.atomic():
             if form_list[0].is_valid():
-                user = form_list[0].save()
+                user_obj = form_list[0].save()
                 user_inform_form = form_list[1].save(commit=False)
-                user_inform_form.user = user
-                user_inform_form.created_by = self.user
+                user_inform_form.user = user_obj
+                user_inform_form.created_by = self.request.user
                 user_inform_form.save()
                 # user = form_list[0].save()
                 # ProjectSiteEngineer.objects.create(user=user, balance=0, created_by=self.request.user)

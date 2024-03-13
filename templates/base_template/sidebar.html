@@ -12,11 +12,11 @@
   <!-- menu profile quick info -->
   <div class="profile clearfix">
     <div class="profile_pic">
-      <img src="{% static 'images/img.jpg' %}" alt="profile_image" class="img-circle profile_img">
+      <img src="/media/{{ request.user.user_profile.profile_img }}" alt="profile_image" class="img-circle profile_img">
     </div>
     <div class="profile_info">
       <span>Welcome,</span>
-      <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+      <h2>{{ request.user.get_full_name }}</h2>
     </div>
   </div>
   <!-- /menu profile quick info -->
@@ -30,13 +30,13 @@
       <ul class="nav side-menu">
         <li><a href="{% url 'dashboard' %}"><i class="fa fa-home"></i> Dashboard </a>
         </li>
-        <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Reference </a>
-        </li>
+        <!-- <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Reference </a></li> -->
         <li><a><i class="fa fa-group"></i> Employee List <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'create_new_user' %}">Create-User</a></li>
+            <li><a href="{% url 'all_user_list' %}">User List</a></li>
             <li><a href="{% url 'site_engineer_create' %}">Create-Engineer</a></li>
-            <li><a href="{% url 'site_engineer_list' %}">List</a></li>
+            <li><a href="{% url 'site_engineer_list' %}">Engineer List</a></li>
           </ul>
         </li>
         <li><a><i class="fa fa-cubes"></i> Tender-Project <span class="fa fa-chevron-down"></span></a>
@@ -72,9 +72,9 @@
             <li><a href="{% url 'bank_info_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-commenting"></i> Messages</a></li>
+        <li><a><i class="fa fa-file-pdf-o"></i> Report</a></li>
         
-        <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li>
+        <!-- <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li> -->
       </ul>
     </div>
   </div>

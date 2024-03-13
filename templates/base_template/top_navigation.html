@@ -8,8 +8,8 @@
     <ul class="nav navbar-nav navbar-right">
       <li class="">
         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          <img src="{% static 'images/img.jpg' %}" alt="Profile Image">
-          {{ user.first_name }} {{ user.last_name }}
+          <img src="/media/{{ request.user.user_profile.profile_img }}" alt="Profile Image">
+          {{ request.user.get_full_name }}
           <span class=" fa fa-angle-down"></span>
         </a>
         <ul class="dropdown-menu dropdown-usermenu pull-right">
