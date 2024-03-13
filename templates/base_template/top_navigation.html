@@ -13,7 +13,7 @@
           <span class=" fa fa-angle-down"></span>
         </a>
         <ul class="dropdown-menu dropdown-usermenu pull-right">
-          <li><a href="javascript:;"> Profile</a></li>
+          <li><a href="{% url 'user_profile_details' request.user.user_profile.pk %}"> Profile</a></li>
           <li><a href="{% url "user_password_change" %}"> Change Password</a></li>
           <li>
             <a href="javascript:;">

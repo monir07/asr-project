@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from .log_entry import CustomLogEntry
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixin import CommonMixin
+from asr.utility import format_search_string, get_fields
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -108,15 +109,14 @@ class Dashboard(LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-from asr.utility import format_search_string, get_fields
 class UserListView(LoginRequiredMixin, generic.ListView):
     title = 'All User List'
     model = User
     context_object_name = 'items'
     # paginate_by = 9
-    template_name = 'tender/tender_project/list.html'
+    template_name = 'authentication/user_profile/list.html'
     list_display = ['username', 'first_name', 'last_name']
-    url_list = ['tender_project_details']
+    url_list = ['user_profile_details']
     # queryset = User.objects.all()
 
     def get_context_data(self, **kwargs):

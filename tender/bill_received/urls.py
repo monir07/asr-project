@@ -6,6 +6,7 @@ urlpatterns = [
     
     path('all-bill-receive/',BillReceivedCreateView.as_view(),name='all_bill_receive'),
     path('list/',MoneyReceivedListView.as_view(),name='all_received_list'),
+    path('details/<int:pk>',MoneyReceivedDetailView.as_view(),name='received_details'),
 
     path('security-money/',SecurityMoneyReceivedCreateView.as_view(),name='received_security_money_create'),
     path('performance-guarantee/',PgReceivedCreateView.as_view(),name='received_pg_create'),

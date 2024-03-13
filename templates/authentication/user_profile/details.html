@@ -51,59 +51,10 @@
                             </thead>
                             <tbody>
                                 {% for name, value in instance.get_fields %}
-                                    {% if value != 'None' and value|length > 0 and name not in "created_at updated_at" %}
-                                        {% if name == 'project' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.project }}</td>
-                                        </tr>
-                                        {% elif name == 'site_engier' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.site_engier }}</td>
-                                        </tr>
-                                        {% elif name == 'security_money' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.security_money }}</td>
-                                        </tr>
-                                        {% elif name == 'performance_gurantee' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.performance_gurantee }}</td>
-                                        </tr>
-                                        {% elif name == 'loan_info' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.loan_info }}</td>
-                                        </tr>
-                                        {% elif name == 'cash_balance' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.cash_balance }}</td>
-                                        </tr>
-                                        {% elif name == 'main_head' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.main_head }}</td>
-                                        </tr>
-                                        {% elif name == 'sub_head' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.sub_head }}</td>
-                                        </tr>
-                                        {% elif name == 'bank_info' %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ instance.bank_info }}</td>
-                                        </tr>
-                                        {% else %}
-                                        <tr>
-                                            <td>{{ name }}</td>
-                                            <td class="text-wrap">{{ value }}</td>
-                                        </tr>
-                                        {% endif %}
-                                    {% endif %}
+                                    <tr>
+                                        <td>{{ name }}</td>
+                                        <td class="text-wrap">{{ value }}</td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

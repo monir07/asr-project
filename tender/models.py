@@ -99,6 +99,9 @@ class UserProfile(BaseModel):
     def __str__(self):
         return str(self.user.get_full_name())
 
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in UserProfile._meta.fields if field.name not in ignore_fields]
+    
     def image_tag(self):
         return format_html('<img src="/media/{}" width = "50" height = "50"/>', self.profile_img)
 
@@ -323,4 +326,7 @@ class MoneyReceived(BaseModel):
     security_money = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)  # retension money amount.
     
     received_amount = models.DecimalField(max_digits=13, decimal_places=2)  # total_amount - all_decution
+
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in MoneyReceived._meta.fields if field.name not in ignore_fields]
 

@@ -226,7 +226,7 @@ class MoneyReceivedListView(generic.ListView):
     queryset = MoneyReceived.objects.filter()
     search_fields = ['project', 'received_method']
     list_display = ['total_amount', 'received_method', 'received_amount']
-    url_list = ['expenditure_form_update', 'expenditure_delete', 'expenditure_details']
+    url_list = ['expenditure_form_update', 'expenditure_delete', 'received_details']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -244,4 +244,20 @@ class MoneyReceivedListView(generic.ListView):
         context['update_url'] = self.url_list[0]
         context['delete_url'] = self.url_list[1]
         context['details_url'] = self.url_list[2]
+        return context
+
+
+class MoneyReceivedDetailView(generic.DetailView):
+    model = MoneyReceived
+    context_object_name = 'instance'
+    pk_url_kwarg = 'pk'
+    # template_name = 'pdf-template/sample.html'
+    template_name = 'tender/tender_project/details.html'
+    title = "Money Reveived Details"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['basic_template'] = ''
+        context['title'] = self.title
         return context

@@ -9,7 +9,7 @@ from django.http.response import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
-from ..models import ProjectSiteEngineer
+from ..models import ProjectSiteEngineer, UserProfile
 from .forms import (SiteEngineerForm, UserRegisterForm)
 from ..forms import UserProfileForm
 from formtools.wizard.views import SessionWizardView
@@ -41,5 +41,21 @@ class SiteEngineerCreateView(SessionWizardView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['basic_template'] = "base_template/base_site.html"
+        context['title'] = self.title
+        return context
+
+
+class UserProfileDetailView(generic.DetailView):
+    model = UserProfile
+    context_object_name = 'instance'
+    pk_url_kwarg = 'pk'
+    # template_name = 'pdf-template/sample.html'
+    template_name = 'authentication/user_profile/details.html'
+    title = "Profile details"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['basic_template'] = ''
         context['title'] = self.title
         return context
