@@ -42,9 +42,22 @@ class ExpenditureCreateView(generic.CreateView):
     
     def form_valid(self, form, *args, **kwargs):
         self.object = form.save(commit=False)
+        bank_obj = form.cleaned_data['bank_info']
+        cash_obj = form.cleaned_data['cash_balance']
         self.object.created_by = self.request.user
         with transaction.atomic():
             form.save()
+        
+        if bank_obj:
+            bank_obj.balance -= form.cleaned_data['paid_amount']
+            bank_obj.updated_by = self.request.user
+            bank_obj.save()
+        
+        if cash_obj:
+            cash_obj.balance -= form.cleaned_data['paid_amount']
+            cash_obj.updated_by = self.request.user
+            cash_obj.save()
+            
         messages.success(self.request, self.success_message)
         return self.get_success_url()
 

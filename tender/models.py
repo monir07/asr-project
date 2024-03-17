@@ -274,8 +274,12 @@ class DailyExpendiature(BaseModel):
     security_money = models.ForeignKey(SecurityMoney, on_delete=models.PROTECT, related_name='security_money_expendiature', null=True, blank=True)
     performance_gurantee = models.ForeignKey(TenderPg, on_delete=models.PROTECT, related_name='pg_expendiature', null=True, blank=True)
     loan_info = models.ForeignKey(LoanInformation, on_delete=models.PROTECT, related_name='loan_expendiature', null=True, blank=True)
+    """ if paid method is cash then it does decrese cash balance """
     cash_balance = models.ForeignKey(CashBalance, on_delete=models.PROTECT, related_name='cash_expendiature', null=True, blank=True)
-    
+    """ if paid method is bank then it does decrese bank balance """
+    bank_info = models.ForeignKey(BankInformation, on_delete=models.PROTECT, related_name='bank_expendiature', null=True, blank=True)
+    cheque_no = models.CharField(max_length=150, null=True, blank=True)
+
     main_head = models.ForeignKey(CostMainHead, on_delete=models.PROTECT, related_name='main_head_expendiature', null=True, blank=True)
     sub_head = models.ForeignKey(CostSubHead, on_delete=models.PROTECT, related_name='sub_head_expendiature', null=True, blank=True)
 
@@ -289,9 +293,7 @@ class DailyExpendiature(BaseModel):
     # expendiature_type = models.CharField(max_length=30, choices=ExpendiatureOption.choices)
     date = models.DateField(default=timezone.now)
     remarks = models.TextField(null=True, blank=True)
-    """ if paid method is bank then it does decrese bank balance """
-    bank_info = models.ForeignKey(BankInformation, on_delete=models.PROTECT, related_name='bank_expendiature', null=True, blank=True)
-    cheque_no = models.CharField(max_length=150, null=True, blank=True)
+    
 
     class Meta:
         ordering = ['-created_at',]
