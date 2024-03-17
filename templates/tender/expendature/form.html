@@ -1,0 +1,83 @@
+{% extends "base_template/base_site.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% crispy example_form example_form.helper %}
+
+
+{% comment %} {% block title %} Expendature {% endblock title %} {% endcomment %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div>
+        {% include "components/messages.html" %}
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+            <div class="x_title">
+                <h2> {{title|title}} <small>follow instruction carefully</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                {% crispy form %}
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(function() {            
+
+        $("#id_main_head").on("select2:select select2:unselect", function (e) {                
+            // Gets the last selected item ID
+            const selectedItemId = parseInt(e.params.data.id);
+            // console.log('Selected id', selectedItemId);                
+            var url = '{% url 'get_sub_head_api' 22 %}'; // This URL comes from cost_head urls.
+            const url_code = url.replace(22, selectedItemId);
+            
+            if (selectedItemId){
+                $.ajax({                       // initialize an AJAX request
+                type: "get",
+                url: url_code,
+                data: {
+                    'id': selectedItemId,
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) { 
+                    let html_data = '<option value="">Choose one</option>';
+                    data.forEach(function (data) {
+                        html_data += `<option value="${data.id}">${data.name}</option>`;
+                    });
+                    $("#id_sub_head").html(html_data);
+                    
+                }
+                });
+            }
+        });
+
+         // on-blur aplied vat in total amount.
+        $('#id_vat_percentage').blur(function () {
+            const vatPercentage = $('#id_vat_percentage').val();
+            const vatAmountTag = $('#id_vat');
+            const amount = $('#id_amount').val();
+            const totalAmount = $('#id_total_amount');
+            const vatAmount = parseFloat(vatPercentage/100) * parseFloat(amount);
+            const amountWithVat = vatAmount + parseFloat(amount);
+
+            vatAmountTag.val(vatAmount);
+            totalAmount.val(amountWithVat);
+        });
+
+    });
+</script>
+{% endblock js %}

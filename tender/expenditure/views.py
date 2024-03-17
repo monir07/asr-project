@@ -35,15 +35,18 @@ class ExpendatureDashboardView(generic.TemplateView):
 class ExpenditureCreateView(generic.CreateView):
     model = DailyExpendiature
     form_class = ProjectExpendiatureForm
-    template_name = 'tender/tender_project/form.html'
+    template_name = 'tender/expendature/form.html'
     success_message = "Created Successfully."
     title = 'New Expenditure Form'
-    success_url = "tender_project_list"
+    success_url = "expenditure_list"
     
     def form_valid(self, form, *args, **kwargs):
-        form.instance.created_by = self.request.user
+        self.object = form.save(commit=False)
+        self.object.created_by = self.request.user
+        with transaction.atomic():
+            form.save()
         messages.success(self.request, self.success_message)
-        return super().form_valid(form)
+        return self.get_success_url()
 
     def get_success_url(self) -> str:
         return HttpResponseRedirect(reverse_lazy(self.success_url))
