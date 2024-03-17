@@ -52,7 +52,7 @@
                             </thead>
                             <tbody>
                                 {% for name, value in instance.get_fields %}
-                                    {% if value != 'None' and value|length > 0 and name not in "created_at updated_at" %}
+                                    {% if value != 'None' and value != '' %}
                                         {% if name == 'project' %}
                                         <tr>
                                             <td>{{ name|capitalize_under }}</td>
@@ -62,6 +62,11 @@
                                         <tr>
                                             <td>{{ name|capitalize_under }}</td>
                                             <td class="text-wrap">{{ instance.site_engier }}</td>
+                                        </tr>
+                                        {% elif name == 'created_by' %}
+                                        <tr>
+                                            <td>{{ name|capitalize_under }}</td>
+                                            <td class="text-wrap">{{ instance.created_by }}</td>
                                         </tr>
                                         {% elif name == 'security_money' %}
                                         <tr>

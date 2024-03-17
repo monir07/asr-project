@@ -22,7 +22,7 @@ class ExpendatureDashboardView(generic.TemplateView):
                 'url_1':['expenditure_form_create', 'Daily Expendature', 'fa fa-caret-square-o-right'],
                 'url_2':['expendature_security_money', 'Tender Security', 'fa fa-comments-o'],
                 'url_3':['expendature_pg', 'Tender PG', 'fa fa-sort-amount-desc'],
-                'url_4':['expendature_loan', 'Loan Pay', 'fa fa-check-square-o'],
+                'url_4':['expendature_loan_pay', 'Loan Pay', 'fa fa-check-square-o'],
                 'url_5':['expenditure_list', 'Expendature List', 'fa fa-list'],
             }
 
@@ -57,7 +57,7 @@ class ExpenditureCreateView(generic.CreateView):
             cash_obj.balance -= form.cleaned_data['paid_amount']
             cash_obj.updated_by = self.request.user
             cash_obj.save()
-            
+
         messages.success(self.request, self.success_message)
         return self.get_success_url()
 
@@ -168,10 +168,10 @@ class TenderSecurityCreateView(generic.CreateView):
         expendature_obj = DailyExpendiature()
         expendature_obj.security_money = self.object
         expendature_obj.quantity = 1
-        expendature_obj.unit = 'na'
+        expendature_obj.unit = 'None'
+        expendature_obj.total_amount = form.cleaned_data['amount']
+        expendature_obj.due_amount = form.cleaned_data['amount'] - form.cleaned_data['paid_amount']
         expendature_obj.paid_amount = form.cleaned_data['paid_amount']
-        expendature_obj.due_amount = 0
-        expendature_obj.total_amount = form.cleaned_data['paid_amount']
         expendature_obj.paid_method = form.cleaned_data['security_type']
         expendature_obj.created_by = self.request.user
         with transaction.atomic():
@@ -201,10 +201,10 @@ class TenderPgCreateView(generic.CreateView):
         expendature_obj = DailyExpendiature()
         expendature_obj.performance_gurantee = self.object
         expendature_obj.quantity = 1
-        expendature_obj.unit = 'na'
+        expendature_obj.unit = 'None'
+        expendature_obj.total_amount = form.cleaned_data['amount']
+        expendature_obj.due_amount = form.cleaned_data['amount'] - form.cleaned_data['paid_amount']
         expendature_obj.paid_amount = form.cleaned_data['paid_amount']
-        expendature_obj.due_amount = 0
-        expendature_obj.total_amount = form.cleaned_data['paid_amount']
         expendature_obj.paid_method = form.cleaned_data['pg_type']
         expendature_obj.created_by = self.request.user
         with transaction.atomic():
@@ -220,29 +220,38 @@ class TenderPgCreateView(generic.CreateView):
         return context
 
 
-class LoanInformationCreateView(generic.CreateView):
-    model = LoanInformation
-    form_class = LoanInformationsForm
-    template_name = 'tender/tender_project/form.html'
+class LoanPayCreateView(generic.CreateView):
+    model = DailyExpendiature
+    form_class = LoanPayForm
+    template_name = 'tender/expendature/form.html'
     success_message = "Created Successfully."
     title = 'Loan Pay Create Form'
     success_url = "loan_info_list"
     
     def form_valid(self, form, *args, **kwargs):
         self.object = form.save(commit=False)
+        self.object.quantity = 1
+        self.object.unit = 'None'
         self.object.created_by = self.request.user
-        expendature_obj = DailyExpendiature()
-        expendature_obj.loan_info = self.object
-        expendature_obj.quantity = 1
-        expendature_obj.unit = 'na'
-        expendature_obj.paid_amount = form.cleaned_data['amount']
-        expendature_obj.due_amount = 0
-        expendature_obj.total_amount = form.cleaned_data['amount']
-        expendature_obj.paid_method = form.cleaned_data['payment_option']
-        expendature_obj.created_by = self.request.user
         with transaction.atomic():
             form.save()
-            expendature_obj.save()
+        
+        bank_obj = form.cleaned_data['bank_info']
+        cash_obj = form.cleaned_data['cash_balance']
+        loan_obj = form.cleaned_data['loan_info']
+        
+        if loan_obj:
+            loan_obj.balance += form.cleaned_data['paid_amount']
+            loan_obj.save()
+        if bank_obj:
+            bank_obj.balance -= form.cleaned_data['paid_amount']
+            bank_obj.updated_by = self.request.user
+            bank_obj.save()
+        
+        if cash_obj:
+            cash_obj.balance -= form.cleaned_data['paid_amount']
+            cash_obj.updated_by = self.request.user
+            cash_obj.save()
         messages.success(self.request, self.success_message)
         return HttpResponseRedirect(reverse_lazy(self.success_url))
     

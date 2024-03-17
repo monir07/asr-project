@@ -9,7 +9,7 @@ from PIL import Image
 
 User = get_user_model()
 
-ignore_fields = ['id', 'project_complete', 'created_at', 'updated_at', 'created_by', 'updated_by', 'basemodel_ptr']
+ignore_fields = ['id', 'project_complete', 'created_at', 'updated_at', 'basemodel_ptr']
 
 
 class PaidMethodOption(models.TextChoices):
@@ -252,19 +252,21 @@ class CashBalance(BaseModel):
 
 class LoanInformation(BaseModel):
     borrower_name = models.CharField(max_length=150)
-    payment_option = models.CharField(max_length=30, choices=PaidMethodOption.choices)
-    # loan_type = models.CharField(max_length=20, choices=LoanOption.choices)
-    amount = models.DecimalField(max_digits=15, decimal_places=2)
-    remarks = models.TextField(null=True, blank=True)
+    phone_no = models.CharField(max_length=20)
+    address = models.TextField(null=True, blank=True)
+    balance = models.DecimalField(max_digits=15, decimal_places=2)
+    # payment_option = models.CharField(max_length=30, choices=PaidMethodOption.choices)
+    # amount = models.DecimalField(max_digits=15, decimal_places=2)
+    # remarks = models.TextField(null=True, blank=True)
     
     # if loan type is banking system then fill bank and cheque no.
-    account_no = models.CharField(max_length=40, null=True, blank=True)
-    bank_name = models.CharField(max_length=80, null=True, blank=True)
-    cheque_no = models.CharField(max_length=50, null=True, blank=True)
+    # account_no = models.CharField(max_length=40, null=True, blank=True)
+    # bank_name = models.CharField(max_length=80, null=True, blank=True)
+    # cheque_no = models.CharField(max_length=50, null=True, blank=True)
     
 
     def __str__(self):
-        return f"{self.borrower_name} : {self.amount}"
+        return f"{self.borrower_name} : {self.balance}"
 
 
 class DailyExpendiature(BaseModel):

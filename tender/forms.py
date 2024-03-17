@@ -306,7 +306,7 @@ def get_cost_head_form(model_class):
 class LoanInformationsForm(forms.ModelForm):
         class Meta:
             model = LoanInformation
-            fields = ('borrower_name','payment_option','amount','bank_name','cheque_no')
+            fields = ('borrower_name', 'phone_no', 'address', 'balance')
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)

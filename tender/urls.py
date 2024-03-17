@@ -252,8 +252,8 @@ urlpatterns = [
     path('loan-info-list/', TenderProjectListView.as_view(
     model = LoanInformation,
     queryset = LoanInformation.objects.all(),
-    search_fields = ['borrower_name', 'bank_name', 'payment_option'],
-    list_display = ['borrower_name','amount','payment_option','bank_name','cheque_no'],
+    search_fields = ['borrower_name', ],
+    list_display = ['borrower_name','balance',],
     url_list = ['expendature_loan_update', 'bank_info_delete', 'bank_info_details'],
     title = 'Loan Information List',
     ), name='loan_info_list'),
