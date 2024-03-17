@@ -201,15 +201,17 @@ class LoanCollectionForm(forms.ModelForm):
 class BillReceivedForm(forms.ModelForm):
     class Meta:
         model = MoneyReceived
-        fields = ('project', 'total_amount', 'received_method', 'bank_info', 'cash_balance',
-                'recieved_cheque_no', 'recieved_bank_name', 'check_attachment', 
-                'deduction_of_vat', 'deduction_of_tax', 'deduction_of_ld', 'misc_deduction', 'security_money', 'received_amount',)
+        fields = ('project', 'received_method', 'bank_info', 'recieved_cheque_no', 
+                  'recieved_bank_name', 'check_attachment', 'cash_balance', 
+                  'total_amount','deduction_of_vat', 'deduction_of_tax', 
+                  'deduction_of_ld', 'misc_deduction', 'security_money', 'received_amount',)
 
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['project'].widget.attrs['class'] ='select2_single form-control'
         self.fields['project'].label ='Select project'
+        self.fields['total_amount'].label ='Total Received Amount'
         self.fields['bank_info'].label ='Select deposit bank'
         self.fields['cash_balance'].label ='Select cash balance'
         self.fields['received_method'].widget.attrs['class'] ='select2_single form-control'

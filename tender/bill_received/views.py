@@ -187,7 +187,7 @@ class LoanReceivedCreateView(generic.CreateView):
 class BillReceivedCreateView(generic.CreateView):
     model = MoneyReceived
     form_class = BillReceivedForm
-    template_name = 'tender/tender_project/form.html'
+    template_name = 'tender/bill_received/form.html'
     success_message = "Bill Received Success."
     title = 'Bill Receive Form'
     success_url = "received_dashboard"
