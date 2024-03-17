@@ -33,13 +33,13 @@ class ProjectExpendiatureForm(forms.ModelForm):
                 ),
                 Row(
                     Column('paid_method', css_class='form-group col-md-6 mb-0'),
-                    Column('paid_amount', css_class='form-group col-md-6 mb-0'),
+                    Column('date', css_class='form-group col-md-6 mb-0'),
                     css_class='row'
                 ),
                 Row(
-                    Column('due_amount', css_class='form-group col-md-4 mb-0'),
                     Column('total_amount', css_class='form-group col-md-4 mb-0'),
-                    Column('date', css_class='form-group col-md-4 mb-0'),
+                    Column('due_amount', css_class='form-group col-md-4 mb-0'),
+                    Column('paid_amount', css_class='form-group col-md-4 mb-0'),
                     css_class='row'
                 ),
                 Row(
@@ -58,7 +58,7 @@ class ProjectExpendiatureForm(forms.ModelForm):
         class Meta:
             model = DailyExpendiature
             fields = ('project', 'site_engier','main_head', 'sub_head', 'quantity', 'unit', 'paid_method',
-                    'paid_amount', 'due_amount', 'total_amount', 'date', 'remarks', 'bank_info', 'cheque_no')
+                    'total_amount', 'due_amount', 'paid_amount', 'date', 'remarks', 'bank_info', 'cheque_no')
 
 
 class SecurityMoneyExpendiatureForm(forms.ModelForm):

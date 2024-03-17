@@ -38,9 +38,9 @@
 <script type="text/javascript">
     $(function() {            
 
-        $("#id_main_head").on("select2:select select2:unselect", function (e) {                
+        $("#id_main_head").on("change", function (e) {                
             // Gets the last selected item ID
-            const selectedItemId = parseInt(e.params.data.id);
+            const selectedItemId = parseInt(this.value);
             // console.log('Selected id', selectedItemId);                
             var url = '{% url 'get_sub_head_api' 22 %}'; // This URL comes from cost_head urls.
             const url_code = url.replace(22, selectedItemId);
@@ -66,16 +66,13 @@
         });
 
          // on-blur aplied vat in total amount.
-        $('#id_vat_percentage').blur(function () {
-            const vatPercentage = $('#id_vat_percentage').val();
-            const vatAmountTag = $('#id_vat');
-            const amount = $('#id_amount').val();
-            const totalAmount = $('#id_total_amount');
-            const vatAmount = parseFloat(vatPercentage/100) * parseFloat(amount);
-            const amountWithVat = vatAmount + parseFloat(amount);
-
-            vatAmountTag.val(vatAmount);
-            totalAmount.val(amountWithVat);
+        $('#id_due_amount').blur(function () {
+            const total_amount = $('#id_total_amount').val();
+            const due_amount = $('#id_due_amount').val();
+            const paid_amount = $('#id_paid_amount');
+            const to_pay = total_amount - due_amount;
+            paid_amount.val(to_pay);
+            // console.log("working....");
         });
 
     });

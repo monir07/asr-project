@@ -5,5 +5,6 @@ psycopg2-binary
 django-crispy-forms
 crispy-bootstrap4
 django-formtools
+djangorestframework
 #pycairo==1.23.0
 #xhtml2pdf
