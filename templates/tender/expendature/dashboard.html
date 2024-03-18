@@ -35,9 +35,9 @@
                                 <div class="icon"><i class="{{ value.2 }}"></i>
                                 </div>
                                 <div class="count">{{ forloop.counter }}</div>
-                                <a href="{% url value.0  %}" class="h3">{{ value.1 }}</a>
+                                <h3> <a href="{% url value.0  %}">{{ value.1 }}</a></h3>
                                 {% comment %} <h3>{{ value.1 }}</h3> {% endcomment %}
-                                {% comment %} <p>Lorem ipsum psdea itgum rixt.</p> {% endcomment %}
+                                <p>{{ value.3 }}</p>
                             </div>
                         </div>
                         {% endfor %}

@@ -100,12 +100,22 @@ class UserPasswordChangeView(PasswordChangeView):
 
 
 class Dashboard(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'base_template/dashboard.html'
+    # template_name = 'base_template/dashboard.html'
+    template_name="tender/expendature/dashboard.html"
     title = 'ASR Dashboard'
+    url_list = {
+                'url_1':['all_bill_receive', 'Project', 'fa fa-caret-square-o-right', 'Here all ongoing project list'],
+                'url_2':['received_security_money_create', 'Tender Security', 'fa fa-comments-o', 'Here all ongoing pg list'],
+                'url_3':['received_pg_create', 'Tender PG', 'fa fa-sort-amount-desc', 'Here all ongoing sq list'],
+                'url_4':['collection_loan_create', 'Loan Collection', 'fa fa-check-square-o', 'Here all ongoing loan list'],
+                'url_5':['received_loan_create', 'Loan Received', 'fa fa-cart-arrow-down', 'Here all ongoing retention list'],
+                'url_6':['all_received_list', 'Received List', 'fa fa-list', 'Here all ongoing received list'],
+            }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
+        context['url_list'] = self.url_list
         return context
 
 
