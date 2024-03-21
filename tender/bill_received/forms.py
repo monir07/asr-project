@@ -199,6 +199,8 @@ class LoanCollectionForm(forms.ModelForm):
 
 
 class BillReceivedForm(forms.ModelForm):
+    retension_receive_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), 
+                            label="Retention Receive Date", help_text="Expected date to receive retention money")
     class Meta:
         model = MoneyReceived
         fields = ('project', 'received_method', 'bank_info', 'recieved_cheque_no', 

@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
-from ..models import MoneyReceived, LoanOption
+from ..models import MoneyReceived, LoanOption, RetensionMoney
 from .forms import *
 from asr.utility import format_search_string, get_fields
 
@@ -191,11 +191,20 @@ class BillReceivedCreateView(generic.CreateView):
     success_message = "Bill Received Success."
     title = 'Bill Receive Form'
     success_url = "received_dashboard"
+
+    def get_initial(self):
+        initial_data =  super().get_initial()
+        initial_data['deduction_of_vat'] = 0
+        initial_data['deduction_of_tax'] = 0
+        initial_data['deduction_of_ld'] = 0
+        initial_data['misc_deduction'] = 0
+        return initial_data
     
     def form_valid(self, form, *args, **kwargs):
         self.object = form.save(commit=False)
         deposit_bank_obj = form.cleaned_data['bank_info']
         cash_obj = form.cleaned_data['cash_balance']
+        retention_money = form.cleaned_data['security_money']
         self.object.created_by = self.request.user
         with transaction.atomic():
             form.save()
@@ -208,6 +217,10 @@ class BillReceivedCreateView(generic.CreateView):
             cash_obj.balance += form.cleaned_data['total_amount']
             cash_obj.updated_by = self.request.user
             cash_obj.save()
+        if retention_money:
+            retention_obj = RetensionMoney()
+            retention_obj.tender = form.cleaned_data['project']
+            retention_obj.amount = retention_money
         messages.success(self.request, self.success_message)
         return HttpResponseRedirect(reverse_lazy(self.success_url))
     

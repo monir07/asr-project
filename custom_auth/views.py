@@ -87,8 +87,10 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(View):
     next_page = reverse_lazy(settings.LOGIN_REDIRECT_URL)
+    success_message = 'Logout successfully'
     def get(self, request, *args, **kwargs):
         auth_logout(request)
+        messages.success(self.request, self.success_message)
         return HttpResponseRedirect(self.next_page)
 
 class UserPasswordChangeView(PasswordChangeView):

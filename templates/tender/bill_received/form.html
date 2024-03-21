@@ -36,12 +36,16 @@
 <script type="text/javascript">
     $(function() {
          // on-blur aplied vat in total amount.
-        $('#id_due_amount').blur(function () {
+        $('#id_received_amount').focus(function () {
             const total_amount = $('#id_total_amount').val();
-            const due_amount = $('#id_due_amount').val();
-            const paid_amount = $('#id_paid_amount');
-            const to_pay = total_amount - due_amount;
-            paid_amount.val(to_pay);
+            const deduction_of_vat = $('#id_deduction_of_vat').val();
+            const deduction_of_tax = $('#id_deduction_of_tax').val();
+            const deduction_of_ld = $('#id_deduction_of_ld').val();
+            const misc_deduction = $('#id_misc_deduction').val();
+            const security_money = $('#id_security_money').val() ? $('#id_security_money').val() : 0;
+            const received_amount = $('#id_received_amount');
+            const net_receive = total_amount - (deduction_of_vat+deduction_of_tax+deduction_of_ld+misc_deduction+security_money);
+            received_amount.val(net_receive);
             // console.log("working....");
         });
 
