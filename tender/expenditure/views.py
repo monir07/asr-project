@@ -96,7 +96,7 @@ class ExpenditureListView(generic.ListView):
     title = 'Daily Expendaure List'
     model = DailyExpendiature
     context_object_name = 'items'
-    paginate_by = 10
+    # paginate_by = 10
     template_name = 'tender/tender_project/list.html'
     queryset = DailyExpendiature.objects.filter()
     search_fields = ['project_name', 'job_no']

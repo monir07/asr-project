@@ -120,7 +120,7 @@ class LoanCollectionCreateView(generic.CreateView):
         loan_obj = form.cleaned_data['loan_info']
         deposit_bank_obj = form.cleaned_data['bank_info']
         cash_obj = form.cleaned_data['cash_balance']
-        loan_obj.amount -= form.cleaned_data['total_amount']
+        loan_obj.balance -= form.cleaned_data['total_amount']
         self.object.received_amount = form.cleaned_data['total_amount']
         self.object.loan_type = LoanOption.COLLECTION
         self.object.created_by = self.request.user
@@ -148,7 +148,7 @@ class LoanCollectionCreateView(generic.CreateView):
 
 class LoanReceivedCreateView(generic.CreateView):
     model = MoneyReceived
-    form_class = LoanCollectionForm
+    form_class = LoanReceiveForm
     template_name = 'tender/tender_project/form.html'
     success_message = "Loan Received Success."
     title = 'Loan Received Form'
@@ -183,6 +183,73 @@ class LoanReceivedCreateView(generic.CreateView):
         context['basic_template'] = ""
         context['title'] = self.title
         return context
+
+from ..models import DailyExpendiature
+
+
+class LoanCollectionListView(generic.ListView):
+    title = 'All Loan Collection List'
+    model = DailyExpendiature
+    context_object_name = 'items'
+    # paginate_by = 10
+    template_name = 'tender/tender_project/list.html'
+    queryset = DailyExpendiature.objects.filter()
+    search_fields = ['project_name', 'job_no']
+    list_display = ['total_amount', 'paid_method', 'date']
+    url_list = ['', '', 'expenditure_details']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(loan_info__balance__gt=0)
+
+        query_param = self.request.GET.copy()
+        search_param = query_param.get('query', None)
+        if search_param:
+            Qr = format_search_string(self.search_fields, search_param)
+            queryset = queryset.filter(Qr)
+        return queryset
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        context['fields'] = get_fields(self.model, self.list_display)
+        context['update_url'] = self.url_list[0]
+        context['delete_url'] = self.url_list[1]
+        context['details_url'] = self.url_list[2]
+        return context
+
+
+class LoanReceivedListView(generic.ListView):
+    title = 'All Loan Received List'
+    model = MoneyReceived
+    context_object_name = 'items'
+    # paginate_by = 10
+    template_name = 'tender/tender_project/list.html'
+    queryset = MoneyReceived.objects.filter()
+    search_fields = ['project', 'received_method']
+    list_display = ['total_amount', 'received_method', 'received_amount']
+    url_list = ['', '', 'received_details']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(loan_info__isnull=False, loan_type=LoanOption.RECEIVE)
+        
+        query_param = self.request.GET.copy()
+        search_param = query_param.get('query', None)
+        if search_param:
+            Qr = format_search_string(self.search_fields, search_param)
+            queryset = queryset.filter(Qr)
+        return queryset
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        context['fields'] = get_fields(self.model, self.list_display)
+        context['update_url'] = self.url_list[0]
+        context['delete_url'] = self.url_list[1]
+        context['details_url'] = self.url_list[2]
+        return context
+
 
 class BillReceivedCreateView(generic.CreateView):
     model = MoneyReceived
