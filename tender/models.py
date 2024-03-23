@@ -255,18 +255,10 @@ class LoanInformation(BaseModel):
     phone_no = models.CharField(max_length=20)
     address = models.TextField(null=True, blank=True)
     balance = models.DecimalField(max_digits=15, decimal_places=2)
-    # payment_option = models.CharField(max_length=30, choices=PaidMethodOption.choices)
-    # amount = models.DecimalField(max_digits=15, decimal_places=2)
-    # remarks = models.TextField(null=True, blank=True)
-    
-    # if loan type is banking system then fill bank and cheque no.
-    # account_no = models.CharField(max_length=40, null=True, blank=True)
-    # bank_name = models.CharField(max_length=80, null=True, blank=True)
-    # cheque_no = models.CharField(max_length=50, null=True, blank=True)
-    
-
     def __str__(self):
         return f"{self.borrower_name} : {self.balance}"
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in LoanInformation._meta.fields if field.name not in ignore_fields]
 
 
 class DailyExpendiature(BaseModel):

@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
 from asr.utility import format_search_string, get_fields
-from .forms import (TenderProjectForm, LoanInformationsForm)
+from .forms import (TenderProjectForm,)
 from .models import (TenderProject, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, LoanInformation)
 
 

@@ -11,7 +11,7 @@ from django.template import loader
 from django.http import HttpResponse
 from ..models import (DailyExpendiature, TenderPg, SecurityMoney, LoanInformation)
 from .forms import *
-from ..forms import (SecurityMoneyForm, TenderPgForm, LoanInformationsForm)
+from ..forms import (SecurityMoneyForm, TenderPgForm)
 from asr.utility import format_search_string, get_fields
 
 
@@ -226,7 +226,7 @@ class LoanPayCreateView(generic.CreateView):
     template_name = 'tender/expendature/form.html'
     success_message = "Created Successfully."
     title = 'Loan Pay Create Form'
-    success_url = "loan_info_list"
+    success_url = "expenditure_dashboard"
     
     def form_valid(self, form, *args, **kwargs):
         self.object = form.save(commit=False)
@@ -258,29 +258,5 @@ class LoanPayCreateView(generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['basic_template'] = ""
-        context['title'] = self.title
-        return context
-
-
-class LoanPayUpdateView(generic.UpdateView):
-    model = LoanInformation
-    form_class = LoanInformationsForm
-    context_object_name = 'instance'
-    template_name = 'tender/tender_project/form.html'
-    success_message = "Updated Successfully."
-    title = 'Loan Pay Update Form'
-    success_url = "loan_info_list"
-
-
-    def form_valid(self, form, *args, **kwargs):
-        self.object = form.save(commit=False)
-        self.object.updated_by = self.request.user
-        self.object.save()
-        messages.success(self.request, self.success_message)
-        return HttpResponseRedirect(reverse_lazy(self.success_url))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['basic_template'] = ''
         context['title'] = self.title
         return context

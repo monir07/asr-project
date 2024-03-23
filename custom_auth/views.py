@@ -106,12 +106,14 @@ class Dashboard(LoginRequiredMixin, generic.TemplateView):
     template_name="tender/expendature/dashboard.html"
     title = 'ASR Dashboard'
     url_list = {
-                'url_1':['all_bill_receive', 'Project', 'fa fa-caret-square-o-right', 'Here all ongoing project list'],
-                'url_2':['received_security_money_create', 'Tender Security', 'fa fa-comments-o', 'Here all ongoing pg list'],
-                'url_3':['received_pg_create', 'Tender PG', 'fa fa-sort-amount-desc', 'Here all ongoing sq list'],
-                'url_4':['collection_loan_create', 'Loan Collection', 'fa fa-check-square-o', 'Here all ongoing loan list'],
-                'url_5':['received_loan_create', 'Loan Received', 'fa fa-cart-arrow-down', 'Here all ongoing retention list'],
-                'url_6':['all_received_list', 'Received List', 'fa fa-list', 'Here all ongoing received list'],
+                'url_1':['tender_project_list', 'Project', 'fa fa-caret-square-o-right', 'Here all ongoing project list'],
+                'url_2':['security_money_list', 'Tender Security', 'fa fa-comments-o', 'Here all ongoing tender security list'],
+                'url_3':['pg_list', 'Tender PG', 'fa fa-sort-amount-desc', 'Here all ongoing tender pg list'],
+                'url_4':['collection_loan_create', 'Loan Collection', 'fa fa-check-square-o', 'Here all loan collection list'],
+                'url_5':['received_loan_create', 'Loan Received', 'fa fa-cart-arrow-down', 'Here all loan receive list'],
+                'url_6':['expenditure_list', 'Expendature List', 'fa fa-list', 'Here all daily expendature list'],
+                'url_7':['all_received_list', 'Bill Received List', 'fa fa-list', 'Here all daily bill received list'],
+                'url_8':['retension_list', 'Retention Money List', 'fa fa-list', 'Here all pending retention money list'],
             }
 
     def get_context_data(self, **kwargs):

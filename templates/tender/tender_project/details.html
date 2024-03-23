@@ -103,6 +103,11 @@
                                             <td>{{ name|capitalize_under }}</td>
                                             <td class="text-wrap">{{ instance.bank_info }}</td>
                                         </tr>
+                                        {% elif name == 'tender' %}
+                                        <tr>
+                                            <td>{{ name|capitalize_under }}</td>
+                                            <td class="text-wrap">{{ instance.tender }}</td>
+                                        </tr>
                                         {% else %}
                                         <tr>
                                             <td>{{ name|capitalize_under }}</td>

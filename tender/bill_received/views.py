@@ -206,8 +206,6 @@ class BillReceivedCreateView(generic.CreateView):
         cash_obj = form.cleaned_data['cash_balance']
         retention_money = form.cleaned_data['security_money']
         self.object.created_by = self.request.user
-        with transaction.atomic():
-            form.save()
         
         if deposit_bank_obj:
             deposit_bank_obj.balance += form.cleaned_data['total_amount']
@@ -221,6 +219,13 @@ class BillReceivedCreateView(generic.CreateView):
             retention_obj = RetensionMoney()
             retention_obj.tender = form.cleaned_data['project']
             retention_obj.amount = retention_money
+            retention_obj.maturity_date = form.cleaned_data['retention_maturity_date']
+            retention_obj.created_by = self.request.user
+            retention_obj.save()
+            self.object.retention_money = retention_obj
+        
+        with transaction.atomic():
+            form.save()
         messages.success(self.request, self.success_message)
         return HttpResponseRedirect(reverse_lazy(self.success_url))
     
@@ -231,7 +236,7 @@ class BillReceivedCreateView(generic.CreateView):
 
 
 class MoneyReceivedListView(generic.ListView):
-    title = 'Money Received List'
+    title = 'All Bill Received List'
     model = MoneyReceived
     context_object_name = 'items'
     paginate_by = 10

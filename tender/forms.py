@@ -303,54 +303,6 @@ def get_cost_head_form(model_class):
     return CostHeadForm
 
 
-class LoanInformationsForm(forms.ModelForm):
-        class Meta:
-            model = LoanInformation
-            fields = ('borrower_name', 'phone_no', 'address', 'balance')
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.fields['payment_option'].widget.attrs['class'] ='select2_single form-control'
-
-
-            self.helper = FormHelper()    
-            self.helper.form_method = 'post'
-            self.helper.layout = Layout(
-                Row(
-                    Column('borrower_name', css_class='form-group col-md-6 mb-0'),
-                    Column('amount', css_class='form-group col-md-6 mb-0'),
-                    css_class='row'
-                ),
-                Row(
-                    Column('payment_option', css_class='form-group col-md-4 mb-0'),
-                    Column('bank_name', css_class='form-group col-md-4 mb-0'),
-                    Column('cheque_no', css_class='form-group col-md-4 mb-0'),
-                    css_class='row'
-                ),
-                Row(
-                    Column(Button('cancel', 'Go Back', css_class='btn-secondary btn-block', onclick="history.back()"), css_class='form-group col-md-3'),
-                    Column(Submit('submit', 'Continue', css_class='btn-primary btn-block'), css_class='form-group col-md-3'),
-                    css_class='row'
-                ),
-            )
-        
-        def clean(self):
-            cleaned_data = super().clean()
-            payment_option = cleaned_data.get('payment_option')
-
-            if payment_option == PaidMethodOption.BANK:
-                bank_name = cleaned_data.get('bank_name')
-                cheque_no = cleaned_data.get('cheque_no')
-                if not bank_name:
-                    self.add_error('bank_name', 'Bank name is required for Bank loan type.')
-                    self.fields['bank_name'].widget.attrs['class'] = 'parsley-error'
-
-                if not cheque_no:
-                    self.add_error('cheque_no', 'Cheque number is required for Bank loan type.')
-                    self.fields['cheque_no'].widget.attrs['class'] = 'parsley-error'
-            return cleaned_data
-
-
 class UserProfileForm(forms.ModelForm):
         date_of_birth = forms.DateField(widget=forms.DateInput(
             attrs={'type': 'date'}))
@@ -376,4 +328,32 @@ class UserProfileForm(forms.ModelForm):
                       'date_of_join', 'address',
                       )
 
-        
+
+class LoanBorrowerForm(forms.ModelForm):
+        class Meta:
+            model = LoanInformation
+            fields = ('borrower_name', 'phone_no', 'address', 'balance')
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['address'].widget.attrs['rows'] ='2'
+
+            self.helper = FormHelper()    
+            self.helper.form_method = 'post'
+            self.helper.layout = Layout(
+                Row(
+                    Column('borrower_name', css_class='form-group col-md-6 mb-0'),
+                    Column('phone_no', css_class='form-group col-md-6 mb-0'),
+                    css_class='row'
+                ),
+                Row(
+                    Column('address', css_class='form-group col-md-6 mb-0'),
+                    Column('balance', css_class='form-group col-md-6 mb-0'),
+                    css_class='row'
+                ),
+                Row(
+                    Column(Button('cancel', 'Go Back', css_class='btn-secondary btn-block', onclick="history.back()"), css_class='form-group col-md-3'),
+                    Column(Submit('submit', 'Submit', css_class='btn-primary btn-block'), css_class='form-group col-md-3'),
+                    css_class='row'
+                ),
+            )        

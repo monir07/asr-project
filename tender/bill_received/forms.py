@@ -199,14 +199,14 @@ class LoanCollectionForm(forms.ModelForm):
 
 
 class BillReceivedForm(forms.ModelForm):
-    retension_receive_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), 
-                            label="Retention Receive Date", help_text="Expected date to receive retention money")
+    retention_maturity_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False, 
+                            label="Retention Maturity Date", help_text="Expected date to withdraw retention money")
     class Meta:
         model = MoneyReceived
         fields = ('project', 'received_method', 'bank_info', 'recieved_cheque_no', 
                   'recieved_bank_name', 'check_attachment', 'cash_balance', 
                   'total_amount','deduction_of_vat', 'deduction_of_tax', 
-                  'deduction_of_ld', 'misc_deduction', 'security_money', 'received_amount',)
+                  'deduction_of_ld', 'misc_deduction', 'security_money', 'retention_maturity_date', 'received_amount')
 
     
     def __init__(self, *args, **kwargs):

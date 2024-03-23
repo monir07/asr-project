@@ -1,8 +1,10 @@
 from django.urls import path, include
 from .views import *
-from .models import (ProjectSiteEngineer, RetensionMoney, SecurityMoney, TenderPg, CostMainHead, CostSubHead, DailyExpendiature, BankInformation)
+from .models import (ProjectSiteEngineer, RetensionMoney, SecurityMoney,
+                     TenderPg, CostMainHead, CostSubHead, BankInformation, 
+                     CashBalance)
 from .forms import (SiteEngineerForm, BankInformationForm, SecurityMoneyForm, TenderPgForm,
-                    get_form, get_cost_head_form)
+                    get_form, get_cost_head_form, LoanBorrowerForm)
 from .engineer import urls as engineer_urls
 from .expenditure import urls as expenditure_urls
 from .bill_received import urls as received_urls
@@ -249,15 +251,48 @@ urlpatterns = [
     ), name='bank_info_delete'),
     
     # -- LOAN INFORMATION URLS -- 
-    path('loan-info-list/', TenderProjectListView.as_view(
+    path('loan-borrower-create/', TenderProjectCreateView.as_view(
+    title = 'Loan Borrower Form',
+    model = LoanInformation,
+    form_class = LoanBorrowerForm,
+    success_url = "loan_borrower_list",
+    ), name='loan_borrower_create'),
+
+    path('loan-borrower-update/<int:pk>', TenderProjectUpdateView.as_view(
+    form_class = LoanBorrowerForm,
+    model = LoanInformation,
+    success_url = "loan_borrower_list",
+    ), name='loan_borrower_update'),
+    
+    path('loan-borrower-details/<int:pk>', TenderProjectDetailView.as_view(
+    model = LoanInformation,
+    title = "Loan Borrower details"
+    ), name='loan_borrower_details'),
+    
+    path('loan-borrower-delete/<int:pk>', TenderProjectDeleteView.as_view(
+    model = LoanInformation,
+    success_url = 'loan_borrower_list',
+    ), name='loan_borrower_delete'),
+
+    path('loan-borrower-list/', TenderProjectListView.as_view(
     model = LoanInformation,
     queryset = LoanInformation.objects.all(),
     search_fields = ['borrower_name', ],
-    list_display = ['borrower_name','balance',],
-    url_list = ['expendature_loan_update', 'bank_info_delete', 'bank_info_details'],
-    title = 'Loan Information List',
-    ), name='loan_info_list'),
+    list_display = ['borrower_name', 'phone_no', 'balance',],
+    url_list = ['loan_borrower_update', 'loan_borrower_delete', 'loan_borrower_details'],
+    title = 'Loan Borrower List',
+    ), name='loan_borrower_list'),
     
+    # -- CASH BALANCE URLS --
+    path('cash-balance-list/', TenderProjectListView.as_view(
+    model = CashBalance,
+    queryset = CashBalance.objects.all(),
+    search_fields = ['balance', ],
+    list_display = ['balance', ],
+    url_list = ['', '', ''],
+    title = 'Cash Balance',
+    ), name='cash_balance_list'),
+
     # Make pdf urls
     path('make-pdf/', render_pdf_view, name='generate_pdf'),
 ]

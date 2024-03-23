@@ -45,12 +45,18 @@
             <li><a href="{% url 'tender_project_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a><i class="fa fa-money"></i> Retension Money <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa-cubes"></i> Loan Borrower <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'loan_borrower_create' %}">Create</a></li>
+            <li><a href="{% url 'loan_borrower_list' %}">List</a></li>
+          </ul>
+        </li>
+        <!-- <li><a><i class="fa fa-money"></i> Retension Money <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'retension_create' %}">New</a></li>
             <li><a href="{% url 'retension_list' %}">List</a></li>
           </ul>
-        </li>
+        </li> -->
         <li><a href="{% url "expenditure_dashboard" %}"><i class="fa fa-qrcode"></i> Expendature</a></li>
         <li><a href="{% url "received_dashboard" %}"><i class="fa fa-credit-card"></i> Received Money</a></li>
         
@@ -72,6 +78,7 @@
             <li><a href="{% url 'bank_info_list' %}">List</a></li>
           </ul>
         </li>
+        <li><a href="{% url 'cash_balance_list' %}"> <i class="fa fa-dollar"></i> Cash Balance</a></li>
         <li><a><i class="fa fa-file-pdf-o"></i> Report</a></li>
         
         <!-- <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li> -->
