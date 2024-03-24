@@ -90,13 +90,15 @@ class ProjectExpendiatureForm(forms.ModelForm):
             elif paid_method == PaidMethodOption.CASH:
                 cash_obj = cleaned_data.get('cash_balance')
                 paid_amount = cleaned_data.get('paid_amount')
-                if cash_obj.balance < paid_amount:
-                    self.add_error('cash_balance', 'Dont have sufficient Balance')
-                    self.fields['cash_balance'].widget.attrs['class'] = 'select2_single form-control parsley-error'
 
                 if not cash_obj:
                     self.add_error('cash_balance', 'Cash Balance is required for Cash Paid type.')
                     self.fields['cash_balance'].widget.attrs['class'] = 'select2_single form-control parsley-error'
+                
+                if cash_obj:
+                    if cash_obj.balance < paid_amount:
+                        self.add_error('cash_balance', 'Dont have sufficient Balance')
+                        self.fields['cash_balance'].widget.attrs['class'] = 'select2_single form-control parsley-error'
             elif paid_method == PaidMethodOption.DUE:
                 due_amount = cleaned_data.get('due_amount')
                 if not due_amount:
