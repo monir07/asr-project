@@ -135,7 +135,7 @@ class TenderProject(BaseModel):
     project_name = models.CharField(max_length=200)
     short_description = models.TextField(null=True, blank=True)
 
-    job_no = models.CharField(max_length=200, null=True, blank=True)
+    job_no = models.CharField(max_length=200, null=True, blank=True, verbose_name="Tender No")
     project_location = models.CharField(max_length=200)
     procuring_entity_name = models.CharField(max_length=200)
     contact_value = models.DecimalField(max_digits=10, decimal_places=2)
@@ -158,6 +158,9 @@ class RetensionMoney(BaseModel):  # as like security  money.
     maturity_date = models.DateField()
     remarks = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.tender}"
+
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in RetensionMoney._meta.fields if field.name not in ignore_fields]
 
@@ -176,6 +179,9 @@ class SecurityMoney(BaseModel):
         return self.tender.project_name
     class Meta:
         ordering = ('-created_at',)
+    
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in SecurityMoney._meta.fields if field.name not in ignore_fields]
 
 
 class TenderPg(BaseModel):  # Pg = performance gurantee
@@ -192,6 +198,9 @@ class TenderPg(BaseModel):  # Pg = performance gurantee
         return self.tender.project_name
     class Meta:
         ordering = ('-created_at',)
+    
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in TenderPg._meta.fields if field.name not in ignore_fields]
 
 
 class CostMainHead(models.Model):
@@ -243,6 +252,9 @@ class BankInformation(BaseModel):
 
     def __str__(self):
         return f"{self.account_no} : {self.bank_name}"
+    
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in BankInformation._meta.fields if field.name not in ignore_fields]
 
 class CashBalance(BaseModel):
     balance = models.DecimalField(max_digits=15, decimal_places=2)
@@ -257,6 +269,7 @@ class LoanInformation(BaseModel):
     balance = models.DecimalField(max_digits=15, decimal_places=2)
     def __str__(self):
         return f"{self.borrower_name} : {self.balance}"
+    
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in LoanInformation._meta.fields if field.name not in ignore_fields]
 

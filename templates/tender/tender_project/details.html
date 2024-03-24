@@ -68,6 +68,11 @@
                                             <td>{{ name|capitalize_under }}</td>
                                             <td class="text-wrap">{{ instance.created_by }}</td>
                                         </tr>
+                                        {% elif name == 'updated_by' %}
+                                        <tr>
+                                            <td>{{ name|capitalize_under }}</td>
+                                            <td class="text-wrap">{{ instance.updated_by }}</td>
+                                        </tr>
                                         {% elif name == 'security_money' %}
                                         <tr>
                                             <td>{{ name|capitalize_under }}</td>
@@ -106,6 +111,11 @@
                                         {% elif name == 'tender' %}
                                         <tr>
                                             <td>{{ name|capitalize_under }}</td>
+                                            <td class="text-wrap">{{ instance.tender }}</td>
+                                        </tr>
+                                        {% elif name == 'job_no' %}
+                                        <tr>
+                                            <td>Tender No</td>
                                             <td class="text-wrap">{{ instance.tender }}</td>
                                         </tr>
                                         {% else %}
