@@ -159,7 +159,7 @@ class LoanReceivedCreateView(generic.CreateView):
         loan_obj = form.cleaned_data['loan_info']
         deposit_bank_obj = form.cleaned_data['bank_info']
         cash_obj = form.cleaned_data['cash_balance']
-        loan_obj.amount = form.cleaned_data['total_amount']
+        loan_obj.balance_debit = form.cleaned_data['total_amount']
         self.object.received_amount = form.cleaned_data['total_amount']
         self.object.loan_type = LoanOption.RECEIVE
         self.object.created_by = self.request.user
@@ -310,7 +310,7 @@ class MoneyReceivedListView(generic.ListView):
     template_name = 'tender/tender_project/list.html'
     queryset = MoneyReceived.objects.filter()
     search_fields = ['project', 'received_method']
-    list_display = ['total_amount', 'received_method', 'received_amount']
+    list_display = ['total_amount', 'received_method', 'received_amount', 'created_at']
     url_list = ['expenditure_form_update', 'expenditure_delete', 'received_details']
 
     def get_queryset(self):

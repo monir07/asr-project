@@ -266,7 +266,10 @@ class LoanInformation(BaseModel):
     borrower_name = models.CharField(max_length=150)
     phone_no = models.CharField(max_length=20)
     address = models.TextField(null=True, blank=True)
-    balance = models.DecimalField(max_digits=15, decimal_places=2)
+    # when loan pay increase creadit_balance
+    balance = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="balance_credit")
+    # when loan received credit debit_balance
+    balance_debit = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     def __str__(self):
         return f"{self.borrower_name} : {self.balance}"
     
