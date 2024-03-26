@@ -78,7 +78,12 @@
             <li><a href="{% url 'bank_info_list' %}">List</a></li>
           </ul>
         </li>
-        <li><a href="{% url 'cash_balance_list' %}"> <i class="fa fa-dollar"></i> Cash Balance</a></li>
+        <li><a><i class="fa fa-dollar"></i> Cash Balance <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a href="{% url 'cash_balance_list' %}">Balance</a></li>
+            <li><a href="{% url 'cash_in_create' %}">Cash IN</a></li>
+          </ul>
+        </li>
         <li><a><i class="fa fa-file-pdf-o"></i> Report</a></li>
         
         <!-- <li><a href="{#" target="_blank"><i class="fa fa-globe"></i> Portfolio Site</a></li> -->

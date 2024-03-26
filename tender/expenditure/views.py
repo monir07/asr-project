@@ -9,7 +9,8 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template import loader
 from django.http import HttpResponse
-from ..models import (DailyExpendiature, TenderPg, SecurityMoney, LoanInformation)
+from ..models import (DailyExpendiature, TenderPg, SecurityMoney, 
+                      LoanInformation, CashBalance, PaidMethodOption)
 from .forms import *
 from ..forms import (SecurityMoneyForm, TenderPgForm)
 from asr.utility import format_search_string, get_fields
@@ -258,5 +259,49 @@ class LoanPayCreateView(generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['basic_template'] = ""
+        context['title'] = self.title
+        return context
+
+
+class CashInCreateView(generic.CreateView):
+    model = DailyExpendiature
+    form_class = CashInForm
+    template_name = 'tender/expendature/form.html'
+    success_message = "Successfully Cash IN."
+    title = 'Cash In Form'
+    success_url = "cash_balance_list"
+    
+    def form_valid(self, form, *args, **kwargs):
+        self.object = form.save(commit=False)
+        bank_obj = form.cleaned_data['bank_info']
+        # cash_obj = get_object_or_404(CashBalance, pk=1)
+        
+        self.object.paid_method = PaidMethodOption.BANK
+        self.object.total_amount = form.cleaned_data['paid_amount']
+        self.object.due_amount = 0
+        self.object.quantity = 1
+        self.object.unit = 'None'
+        self.object.created_by = self.request.user
+        with transaction.atomic():
+            form.save()
+        
+        if bank_obj:
+            bank_obj.balance -= form.cleaned_data['paid_amount']
+            bank_obj.updated_by = self.request.user
+            bank_obj.save()
+        
+        cash_obj = CashBalance.objects.first()
+        cash_obj.balance += form.cleaned_data['paid_amount']
+        cash_obj.updated_by = self.request.user
+        cash_obj.save()
+
+        messages.success(self.request, self.success_message)
+        return self.get_success_url()
+
+    def get_success_url(self) -> str:
+        return HttpResponseRedirect(reverse_lazy(self.success_url))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['title'] = self.title
         return context

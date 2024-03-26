@@ -15,4 +15,6 @@ urlpatterns = [
     path('performance-gurantee/',TenderPgCreateView.as_view(),name='expendature_pg'),
     # -- LOAN PAYS URLS -- 
     path('loan-pay/', LoanPayCreateView.as_view(), name='expendature_loan_pay'),
+    # -- CASH IN FROM BANK URLS -- 
+    path('cash-in-form/', CashInCreateView.as_view(), name='cash_in_create'),
 ]
