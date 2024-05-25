@@ -33,3 +33,36 @@
     </div>
 </div>
 {% endblock content %}
+{% block js %}
+<script type="text/javascript">
+    $(function() {
+        // on-blur aplied vat in total amount.
+        $("#id_received_method").on("change", function (e) {                
+            // Gets the last selected item ID
+            const paidFrom = this.value;
+            const bankInfo = $('#div_id_bank_info');
+            const cashBalanceDiv = $('#div_id_cash_balance');
+            const cashBalance = $('#id_cash_balance');
+            console.log('paid method', paidFrom); 
+            // Toggle visibility of elements based on payment method
+            if (paidFrom === 'cash') {
+                bankInfo.hide();
+                cashBalanceDiv.show();
+                // Select the first option (assuming it's the cash balance)
+                console.log(cashBalance);
+                cashBalance.prop('selectedIndex', 1);  // Uses prop() for select elements
+            } else if (paidFrom === 'bank') {
+                cashBalanceDiv.hide();
+                bankInfo.show();
+                cashBalance.prop('selectedIndex', 0) // Deselect cashBalance  user -1 is best practice
+            } else {
+                // Handle other payment methods (optional)
+                bankInfo.show();
+                cashBalanceDiv.show();
+                cashBalance.prop('selectedIndex', 0)  // Deselect cashBalance  user -1 is best practice
+            }
+        });
+
+    });
+</script>
+{% endblock js %}

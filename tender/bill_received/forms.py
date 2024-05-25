@@ -209,6 +209,7 @@ class LoanReceiveForm(forms.ModelForm):
         self.fields['loan_info'] = forms.ModelChoiceField(queryset=LoanInformation.objects.filter(balance__gte=0))
         self.fields['loan_info'].widget.attrs['class'] ='select2_single form-control'
         self.fields['loan_info'].label ='Select Loan Borrower'
+        self.fields['total_amount'].label ='Total Received Amount'
         self.fields['bank_info'].label ='Select deposit bank'
         self.fields['cash_balance'].label ='Select cash balance'
         self.fields['account_no'].label ='Received Account No'

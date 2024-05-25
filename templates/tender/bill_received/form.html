@@ -49,6 +49,42 @@
             // console.log("working....");
         });
 
+        // ON SELECT RECEIVED OPTION CHANGE.
+        $("#id_received_method").on("change", function (e) {                
+            // Gets the last selected item ID
+            const paidFrom = this.value;
+            const bankInfo = $('#div_id_bank_info');
+            const chequeInfo = $('#div_id_recieved_cheque_no');
+            const bankName = $('#div_id_recieved_bank_name');
+            const chequeAttach = $('#div_id_check_attachment');
+            const cashBalanceDiv = $('#div_id_cash_balance');
+            const cashBalance = $('#id_cash_balance');
+            console.log('paid method', paidFrom); 
+            // Toggle visibility of elements based on payment method
+            if (paidFrom === 'cash') {
+                bankInfo.hide();
+                chequeInfo.hide();
+                bankName.hide();
+                chequeAttach.hide();
+                cashBalanceDiv.show();
+                // Select the first option (assuming it's the cash balance)
+                console.log(cashBalance);
+                cashBalance.prop('selectedIndex', 1);  // Uses prop() for select elements
+            } else if (paidFrom === 'bank') {
+                cashBalanceDiv.hide();
+                bankInfo.show();
+                chequeInfo.show();
+                bankName.show();
+                chequeAttach.show();
+                cashBalance.prop('selectedIndex', 0) // Deselect cashBalance  user -1 is best practice
+            } else {
+                // Handle other payment methods (optional)
+                bankInfo.show();
+                cashBalanceDiv.show();
+                cashBalance.prop('selectedIndex', 0)  // Deselect cashBalance  user -1 is best practice
+            }
+        });
+
     });
 </script>
 {% endblock js %}

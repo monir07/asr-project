@@ -221,6 +221,8 @@ class CostMainHead(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+    class Meta:
+        ordering = ('name', )
 
 
 class CostSubHead(models.Model):
@@ -242,7 +244,8 @@ class CostSubHead(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)        
-
+    class Meta:
+        ordering = ('name', )
 
 class BankInformation(BaseModel):
     account_no = models.CharField(max_length=150, unique=True)
@@ -267,11 +270,11 @@ class LoanInformation(BaseModel):
     phone_no = models.CharField(max_length=20)
     address = models.TextField(null=True, blank=True)
     # when loan pay increase creadit_balance
-    balance = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="balance_credit")
+    balance = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Assets")
     # when loan received credit debit_balance
-    balance_debit = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    balance_debit = models.DecimalField(max_digits=15, decimal_places=2, default=0, verbose_name="Liabilities")
     def __str__(self):
-        return f"{self.borrower_name} : {self.balance}"
+        return f"{self.borrower_name}"
     
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in LoanInformation._meta.fields if field.name not in ignore_fields]

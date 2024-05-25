@@ -25,14 +25,11 @@
         </div>
 
         <div class="title_right">
-          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for...">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Go!</button>
-              </span>
-            </div>
+          {% if new_form %}
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">
+            <a href="{% url new_form %}" class="btn btn-success"> <i class="fa fa-pencil"></i>  New Entry</a>
           </div>
+          {% endif %}
         </div>
       </div>
 

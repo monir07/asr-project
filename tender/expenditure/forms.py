@@ -12,6 +12,7 @@ class ProjectExpendiatureForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             self.fields['project'].widget.attrs['class'] ='select2_single form-control'
             self.fields['site_engier'].widget.attrs['class'] ='select2_single form-control'
+            self.fields['site_engier'].label ='Select Engineer'
             self.fields['main_head'].widget.attrs['class'] ='select2_single form-control'
             self.fields['sub_head'].widget.attrs['class'] ='select2_single form-control'
             self.fields['paid_method'].widget.attrs['class'] ='select2_single form-control'

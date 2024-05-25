@@ -94,7 +94,7 @@ class ExpenditureUpdateView(generic.UpdateView):
 
 
 class ExpenditureListView(generic.ListView):
-    title = 'Daily Expendaure List'
+    title = 'Daily Expenditure List'
     model = DailyExpendiature
     context_object_name = 'items'
     # paginate_by = 10
@@ -116,6 +116,7 @@ class ExpenditureListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
+        context['new_form'] = 'expenditure_form_create'
         context['fields'] = get_fields(self.model, self.list_display)
         context['update_url'] = self.url_list[0]
         context['delete_url'] = self.url_list[1]
